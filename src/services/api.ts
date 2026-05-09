@@ -1,19 +1,18 @@
 import axios from 'axios';
 import type {
-  AchievementRequestDto,
-  AchievementResponseDto,
-  AchievementPlayersDto,
-  CoachRequestDto,
-  CoachResponseDto,
-  TeamRequestDto,
-  TeamResponseDto,
-  PlayerRequestDto,
-  PlayerResponseDto,
-  PlayerSearchCriteria,
-  PageResponse,
-  StatisticRequestDto,
-  StatisticResponseDto,
-  PlayerInfoDto,
+    AchievementRequestDto,
+    AchievementResponseDto,
+    AchievementPlayersDto,
+    CoachRequestDto,
+    CoachResponseDto,
+    TeamRequestDto,
+    TeamResponseDto,
+    PlayerRequestDto,
+    PlayerResponseDto,
+    PlayerSearchCriteria,
+    PageResponse,
+    StatisticRequestDto,
+    StatisticResponseDto,
 } from '../types/index';
 
 const api = axios.create({
@@ -30,7 +29,6 @@ export const achievementApi = {
     update: (id: number, dto: AchievementRequestDto) => api.put<AchievementResponseDto>(`/achievements/${id}`, dto),
     patch: (id: number, dto: AchievementRequestDto) => api.patch<AchievementResponseDto>(`/achievements/${id}`, dto),
     delete: (id: number) => api.delete(`/achievements/${id}`),
-    // НОВЫЙ МЕТОД: получить игроков с достижением и без него
     getPlayers: (id: number) => api.get<AchievementPlayersDto>(`/achievements/${id}/players`),
 };
 

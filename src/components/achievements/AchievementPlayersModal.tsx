@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { playerApi, achievementApi } from '../../services/api';
 import { Modal } from '../common/Modal';
 import { ConfirmDialog } from '../common/ConfirmDialog';
-import type { AchievementPlayersDto, PlayerInfoDto } from '../../types/index';
+import type { AchievementPlayersDto } from '../../types/index';
 
 interface Props {
     achievementId: number;

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
-import { coachApi, teamApi } from '../../services/api';
+import { coachApi } from '../../services/api';
 import { CoachForm } from './CoachForm';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Modal } from '../common/Modal';
-import type { CoachResponseDto, TeamResponseDto } from '../../types/index';
+import type { CoachResponseDto } from '../../types/index';
 
 export const CoachList = () => {
     const [coaches, setCoaches] = useState<CoachResponseDto[]>([]);
-    const [teams] = useState<TeamResponseDto[]>([]);
     const [loading, setLoading] = useState(false);
     const [editingCoach, setEditingCoach] = useState<CoachResponseDto | null>(null);
     const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -123,7 +122,6 @@ export const CoachList = () => {
                                     <div style={{ fontSize: '0.9rem' }}>Команда: {c.teamName}</div>
                                     <div style={{ fontSize: '0.85rem', opacity: 0.8 }}>Тактика: {c.tactic || '—'}</div>
                                 </div>
-                                {/* Кнопки вертикально, как в командах */}
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginLeft: '1rem' }}>
                                     <button onClick={() => openEditModal(c)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>
                                         Редактировать

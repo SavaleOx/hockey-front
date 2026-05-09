@@ -4,13 +4,13 @@ import type { PlayerRequestDto } from '../../types/index';
 
 interface Props {
     teamId: number;
-    teamName?: string; // имя команды для отображения
+    teamName?: string;
     onClose: () => void;
     onSuccess: () => void;
 }
 
 interface TempPlayer {
-    id: number; // временный идентификатор для ключа
+    id: number;
     name: string;
     surname: string;
     number: number;
@@ -60,7 +60,6 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
         if (!validate()) return;
         setLoading(true);
         try {
-            // Преобразуем TempPlayer в PlayerRequestDto (goals = 0, assists = 0)
             const dtoList: PlayerRequestDto[] = players.map(p => ({
                 name: p.name,
                 surname: p.surname,
@@ -102,7 +101,6 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                 flexDirection: 'column',
                 overflow: 'hidden'
             }}>
-                {/* Заголовок */}
                 <div style={{
                     padding: '1rem 1.5rem',
                     borderBottom: '2px solid var(--border)',
@@ -143,7 +141,6 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                     </button>
                 </div>
 
-                {/* Таблица с игроками */}
                 <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
                     <div style={{ marginBottom: '1rem' }}>
                         <button onClick={addPlayer} className="btn-success" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -164,7 +161,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                 </tr>
                             </thead>
                             <tbody>
-                                {players.map((p, idx) => (
+                                {players.map(p => (
                                     <tr key={p.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                         <td style={{ padding: '0.5rem' }}>
                                             <input
@@ -236,7 +233,6 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                     {error && <div style={{ color: 'var(--danger)', marginTop: '1rem', fontSize: '0.85rem' }}>{error}</div>}
                 </div>
 
-                {/* Кнопки действий */}
                 <div style={{
                     padding: '1rem 1.5rem',
                     borderTop: '1px solid var(--border)',
