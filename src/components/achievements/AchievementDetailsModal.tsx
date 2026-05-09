@@ -1,4 +1,5 @@
 import { Modal } from '../common/Modal';
+import type { AchievementResponseDto } from '../../types/index';
 
 interface Props {
     achievement: AchievementResponseDto;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { statisticApi } from '../../services/api';
+import type { StatisticRequestDto, StatisticResponseDto } from '../../types/index';
 
 interface Props {
     playerId?: number;

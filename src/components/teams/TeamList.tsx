@@ -6,6 +6,7 @@ import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Modal } from '../common/Modal';
 import { TeamPlayersModal } from './TeamPlayersModal';
 import { PlayerDetailsModal } from '../players/PlayerDetailsModal';
+import type { TeamResponseDto } from '../../types/index';
 
 export const TeamList = () => {
     const [teams, setTeams] = useState<TeamResponseDto[]>([]);

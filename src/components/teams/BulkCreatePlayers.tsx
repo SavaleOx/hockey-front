@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { teamApi } from '../../services/api';
+import type { PlayerRequestDto } from '../../types/index';
 
 interface Props {
     teamId: number;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { playerApi, statisticApi } from '../../services/api';
 import { Modal } from '../common/Modal';
+import type { PlayerResponseDto, StatisticResponseDto, AchievementResponseDto } from '../../types/index';
 
 interface Props {
     playerId: number;

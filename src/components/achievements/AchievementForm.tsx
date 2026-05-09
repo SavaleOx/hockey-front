@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { achievementApi } from '../../services/api';
+import type { AchievementRequestDto, AchievementResponseDto } from '../../types/index';
 
 interface Props {
     onSuccess: () => void;

@@ -3,6 +3,7 @@ import { coachApi, teamApi } from '../../services/api';
 import { CoachForm } from './CoachForm';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Modal } from '../common/Modal';
+import type { CoachResponseDto, TeamResponseDto } from '../../types/index';
 
 export const CoachList = () => {
     const [coaches, setCoaches] = useState<CoachResponseDto[]>([]);

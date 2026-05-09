@@ -1,4 +1,4 @@
-/*export interface AchievementRequestDto {
+export interface AchievementRequestDto {
     name: string;
     description?: string;
 }
@@ -116,4 +116,4 @@ export interface PlayerInfoDto {
 export interface AchievementPlayersDto {
     playersWithAchievement: PlayerInfoDto[];
     playersWithoutAchievement: PlayerInfoDto[];
-}*/
+}

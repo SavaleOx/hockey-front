@@ -7,6 +7,7 @@ import { PlayerAchievements } from './PlayerAchievements';
 import { PlayerDetailsModal } from './PlayerDetailsModal';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Modal } from '../common/Modal';
+import type { PlayerResponseDto, TeamResponseDto } from '../../types/index';
 
 export const PlayerList = () => {
     const [allPlayers, setAllPlayers] = useState<PlayerResponseDto[]>([]);

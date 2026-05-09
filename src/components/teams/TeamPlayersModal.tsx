@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { playerApi } from '../../services/api';
 import { Modal } from '../common/Modal';
+import type { PlayerResponseDto } from '../../types/index';
 
 interface Props {
   teamId: number;

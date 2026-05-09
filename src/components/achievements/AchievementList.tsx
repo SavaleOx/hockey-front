@@ -5,6 +5,7 @@ import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Modal } from '../common/Modal';
 import { AchievementPlayersModal } from './AchievementPlayersModal';
 import { AchievementDetailsModal } from './AchievementDetailsModal';
+import type { AchievementResponseDto } from '../../types/index';
 
 // Функция склонения для русских существительных
 const getDeclension = (n: number, one: string, few: string, many: string) => {

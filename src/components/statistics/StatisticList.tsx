@@ -3,6 +3,7 @@ import { statisticApi, playerApi } from '../../services/api';
 import { StatisticForm } from './StatisticForm';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Modal } from '../common/Modal';
+import type { StatisticResponseDto, PlayerResponseDto } from '../../types/index';
 
 export const StatisticList = () => {
     const [players, setPlayers] = useState<PlayerResponseDto[]>([]);

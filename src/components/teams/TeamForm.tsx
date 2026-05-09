@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { teamApi } from '../../services/api';
+import type { TeamRequestDto, TeamResponseDto } from '../../types/index';
 
 interface Props {
     onSuccess: () => void;

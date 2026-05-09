@@ -1,5 +1,20 @@
 import axios from 'axios';
-
+import type {
+  AchievementRequestDto,
+  AchievementResponseDto,
+  AchievementPlayersDto,
+  CoachRequestDto,
+  CoachResponseDto,
+  TeamRequestDto,
+  TeamResponseDto,
+  PlayerRequestDto,
+  PlayerResponseDto,
+  PlayerSearchCriteria,
+  PageResponse,
+  StatisticRequestDto,
+  StatisticResponseDto,
+  PlayerInfoDto,
+} from '../types/index';
 
 const api = axios.create({
     baseURL: 'http://localhost:8081',
