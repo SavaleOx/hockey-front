@@ -1,0 +1,333 @@
+/* Холодная цветовая схема: глубокий синий, стальной, снежно-белый */
+:root {
+  --primary-dark: #1e2a3a;
+  --primary: #2c3e50;
+  --primary-light: #34495e;
+  --accent: #2980b9;
+  --accent-light: #3498db;
+  --text-light: #ecf0f1;
+  --text-dark: #2c3e50;
+  --bg-light: #f0f4f8;
+  --bg-card: #ffffff;
+  --border: #bdc3c7;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --danger: #e74c3c;
+  --success: #27ae60;
+  --warning: #f39c12;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Навигация */
+nav {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  box-shadow: 0 2px 8px var(--shadow);
+  padding: 0.75rem 1rem;
+}
+
+nav a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+  margin-right: 1.5rem;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: var(--accent-light);
+}
+
+/* Карточки, формы, таблицы */
+.border, .card, form:not(.inline-form) {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+button, .btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.4rem 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background-color: var(--primary-light);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-light);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.btn-success {
+  background-color: var(--success);
+}
+
+input, select, textarea {
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  background-color: white;
+  transition: border 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.2);
+}
+
+/* Модальное окно */
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Таблицы и списки */
+.list-item {
+  background: var(--bg-card);
+  border-left: 4px solid var(--accent);
+  transition: box-shadow 0.2s;
+}
+
+.list-item:hover {
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+/* Пагинация */
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Загрузка */
+.loading-spinner {
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-fadeIn { animation: fadeIn 0.2s ease-out; }
+.animate-slideUp { animation: slideUp 0.3s ease-out; }
+
+/* Тёмная тема */
+.dark {
+  --primary-dark: #0f172a;
+  --primary: #1e293b;
+  --primary-light: #334155;
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --text-light: #f8fafc;
+  --text-dark: #e2e8f0;
+  --bg-light: #0f172a;
+  --bg-card: #1e293b;
+  --border: #334155;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --danger: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+}
+
+.dark body {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+}
+
+.dark .list-item,
+.dark .border,
+.dark .card,
+.dark form:not(.inline-form) {
+  background-color: var(--bg-card);
+  border-color: var(--border);
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: var(--bg-card);
+  border-color: var(--border);
+  color: var(--text-dark);
+}
+
+.dark .modal-content {
+  background: var(--bg-card);
+}
+
+/* ===== НАВИГАЦИЯ ===== */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    box-shadow: 0 4px 12px var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+}
+
+.navbar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.theme-toggle {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+}
+.theme-toggle:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.navbar-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 0.75rem;
+}
+
+.navbar-links a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.navbar-links a:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.navbar-links a.active {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+
+/* Бейджи достижений */
+.achievement-badge {
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: help;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.achievement-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.achievement-badge .tooltip {
+    visibility: hidden;
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0,0,0,0.85);
+    color: #fff;
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1;
+    pointer-events: none;
+    transition: visibility 0.2s;
+}
+.achievement-badge:hover .tooltip {
+    visibility: visible;
+}
+/* Адаптация для тёмной темы */
+.dark .achievement-badge {
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+}
