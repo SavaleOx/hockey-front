@@ -7,7 +7,6 @@ import { AchievementPlayersModal } from './AchievementPlayersModal';
 import { AchievementDetailsModal } from './AchievementDetailsModal';
 import type { AchievementResponseDto } from '../../types/index';
 
-// Функция склонения для русских существительных
 const getDeclension = (n: number, one: string, few: string, many: string) => {
     const mod10 = n % 10;
     const mod100 = n % 100;
@@ -88,6 +87,79 @@ export const AchievementList = () => {
 
     return (
         <div style={{ padding: '1rem', maxWidth: '1280px', margin: '0 auto' }}>
+            <style>{`
+                /* Стили для таблицы достижений */
+                .achievements-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    background: var(--bg-card);
+                    border-radius: 0.75rem;
+                    overflow: hidden;
+                    min-width: 600px;
+                }
+                .achievements-table th,
+                .achievements-table td {
+                    padding: 0.75rem;
+                    vertical-align: middle;
+                }
+                .achievements-table th {
+                    background: var(--primary);
+                    color: white;
+                }
+                .achievements-table td {
+                    border-bottom: 1px solid var(--border);
+                }
+                /* Колонка Название – максимальная ширина 200px, перенос слов */
+                .achievements-table .col-name {
+                    max-width: 200px;
+                    word-break: break-word;
+                    white-space: normal;
+                }
+                /* Колонка Описание – максимальная ширина 250px, перенос */
+                .achievements-table .col-desc {
+                    max-width: 250px;
+                    word-break: break-word;
+                    white-space: normal;
+                }
+                /* Колонка Игроков – фиксированная ширина */
+                .achievements-table .col-players {
+                    text-align: center;
+                    white-space: nowrap;
+                }
+                /* Колонка Действия – фиксированная ширина, горизонтальные кнопки */
+                .achievements-table .col-actions {
+                    text-align: center;
+                    white-space: nowrap;
+                    width: 200px;
+                }
+                .action-buttons-horizontal {
+                    display: flex;
+                    gap: 0.4rem;
+                    justify-content: center;
+                    flex-wrap: nowrap;
+                }
+                .action-buttons-horizontal button {
+                    font-size: 0.7rem;
+                    padding: 0.2rem 0.5rem;
+                    white-space: nowrap;
+                }
+                /* На мобильных устройствах кнопки становятся вертикальными */
+                @media (max-width: 768px) {
+                    .achievements-table .col-actions {
+                        white-space: normal;
+                        width: auto;
+                    }
+                    .action-buttons-horizontal {
+                        flex-direction: column;
+                        gap: 0.3rem;
+                    }
+                    .action-buttons-horizontal button {
+                        width: 100%;
+                        white-space: nowrap;
+                    }
+                }
+            `}</style>
+
             <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -96,8 +168,13 @@ export const AchievementList = () => {
                 marginBottom: '1rem',
                 gap: '1rem'
             }}>
-                <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold' }}>🏆 Достижения</h1>
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    🏆 Достижения
+                    <span style={{ fontSize: '0.875rem', background: 'var(--border)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
+                        {filteredAchievements.length}
+                    </span>
+                </h1>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <input
                         type="text"
                         placeholder="🔍 Поиск по названию или описанию..."
@@ -113,12 +190,8 @@ export const AchievementList = () => {
                         }}
                     />
                     <div style={{ display: 'flex', gap: '0.25rem', background: 'var(--bg-card)', borderRadius: '0.5rem', border: '1px solid var(--border)' }}>
-                        <button onClick={() => setViewMode('grid')} style={{ padding: '0.5rem 0.75rem', background: viewMode === 'grid' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0.5rem 0 0 0.5rem', cursor: 'pointer', color: viewMode === 'grid' ? 'white' : 'var(--text-dark)' }}>
-                            📱 Сетка
-                        </button>
-                        <button onClick={() => setViewMode('list')} style={{ padding: '0.5rem 0.75rem', background: viewMode === 'list' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0 0.5rem 0.5rem 0', cursor: 'pointer', color: viewMode === 'list' ? 'white' : 'var(--text-dark)' }}>
-                            📋 Список
-                        </button>
+                        <button onClick={() => setViewMode('grid')} style={{ padding: '0.5rem 0.75rem', background: viewMode === 'grid' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0.5rem 0 0 0.5rem', cursor: 'pointer', color: viewMode === 'grid' ? 'white' : 'var(--text-dark)' }}>📱 Сетка</button>
+                        <button onClick={() => setViewMode('list')} style={{ padding: '0.5rem 0.75rem', background: viewMode === 'list' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0 0.5rem 0.5rem 0', cursor: 'pointer', color: viewMode === 'list' ? 'white' : 'var(--text-dark)' }}>📋 Список</button>
                     </div>
                     <button onClick={openCreateModal} className="btn-primary">➕ Создать достижение</button>
                 </div>
@@ -130,7 +203,7 @@ export const AchievementList = () => {
             )}
 
             {viewMode === 'grid' && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                <div className="grid-view">
                     {filteredAchievements.map(ach => (
                         <div key={ach.id} className="list-item" style={{ padding: '1rem', borderRadius: '0.75rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -138,25 +211,11 @@ export const AchievementList = () => {
                                     style={{ flex: 1, minWidth: 0, cursor: 'pointer' }}
                                     onClick={() => setDetailsModalAchievement(ach)}
                                 >
-                                    <h3 style={{
-                                        fontSize: '1.2rem',
-                                        fontWeight: 'bold',
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis'
-                                    }}>
+                                    <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                         {ach.name}
                                     </h3>
                                     {ach.description && (
-                                        <p style={{
-                                            fontSize: '0.85rem',
-                                            opacity: 0.8,
-                                            marginTop: '0.25rem',
-                                            display: '-webkit-box',
-                                            WebkitLineClamp: 2,
-                                            WebkitBoxOrient: 'vertical',
-                                            overflow: 'hidden'
-                                        }}>
+                                        <p style={{ fontSize: '0.85rem', opacity: 0.8, marginTop: '0.25rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                                             {ach.description}
                                         </p>
                                     )}
@@ -167,9 +226,9 @@ export const AchievementList = () => {
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginLeft: '1rem' }}>
-                                    <button onClick={() => openEditModal(ach)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Edit</button>
+                                    <button onClick={() => openEditModal(ach)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
                                     <button onClick={() => setPlayersModalAchievement(ach)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>👥 Игроки</button>
-                                    <button onClick={() => setDeleteId(ach.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Delete</button>
+                                    <button onClick={() => setDeleteId(ach.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
                                 </div>
                             </div>
                         </div>
@@ -178,31 +237,31 @@ export const AchievementList = () => {
             )}
 
             {viewMode === 'list' && (
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--bg-card)', borderRadius: '0.75rem' }}>
-                        <thead style={{ background: 'var(--primary)', color: 'white' }}>
+                <div className="table-wrapper">
+                    <table className="achievements-table">
+                        <thead>
                             <tr>
-                                <th style={{ padding: '0.75rem', textAlign: 'left' }}>Название</th>
-                                <th style={{ padding: '0.75rem', textAlign: 'left' }}>Описание</th>
-                                <th style={{ padding: '0.75rem', textAlign: 'center' }}>Игроков</th>
-                                <th style={{ padding: '0.75rem', textAlign: 'center' }}>Действия</th>
+                                <th className="col-name">Название</th>
+                                <th className="col-desc">Описание</th>
+                                <th className="col-players">Игроков</th>
+                                <th className="col-actions">Действия</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredAchievements.map(ach => (
-                                <tr key={ach.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                                    <td style={{ padding: '0.75rem', cursor: 'pointer' }} onClick={() => setDetailsModalAchievement(ach)}>
+                                <tr key={ach.id}>
+                                    <td className="col-name" style={{ cursor: 'pointer' }} onClick={() => setDetailsModalAchievement(ach)}>
                                         <strong>{ach.name}</strong>
                                     </td>
-                                    <td style={{ padding: '0.75rem', opacity: 0.85, cursor: 'pointer' }} onClick={() => setDetailsModalAchievement(ach)}>
+                                    <td className="col-desc" style={{ opacity: 0.85, cursor: 'pointer' }} onClick={() => setDetailsModalAchievement(ach)}>
                                         {ach.description || '—'}
                                     </td>
-                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>{ach.playersCount}</td>
-                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>
-                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                            <button onClick={() => openEditModal(ach)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Edit</button>
-                                            <button onClick={() => setPlayersModalAchievement(ach)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>👥 Игроки</button>
-                                            <button onClick={() => setDeleteId(ach.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Delete</button>
+                                    <td className="col-players">{ach.playersCount}</td>
+                                    <td className="col-actions">
+                                        <div className="action-buttons-horizontal">
+                                            <button onClick={() => openEditModal(ach)} className="btn-primary">✏️ Редактировать</button>
+                                            <button onClick={() => setPlayersModalAchievement(ach)} className="btn-success">👥 Игроки</button>
+                                            <button onClick={() => setDeleteId(ach.id)} className="btn-danger">🗑️ Удалить</button>
                                         </div>
                                     </td>
                                 </tr>

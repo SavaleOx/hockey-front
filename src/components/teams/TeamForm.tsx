@@ -11,7 +11,13 @@ interface Props {
 export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
     const [form, setForm] = useState<TeamRequestDto>({ name: '', city: '' });
     const [submitting, setSubmitting] = useState(false);
-    const [errors, setErrors] = useState({ name: '', city: '' });
+    const [errors, setErrors] = useState({ name: '', city: '', duplicate: '' });
+    const [allTeams, setAllTeams] = useState<TeamResponseDto[]>([]);
+
+    useEffect(() => {
+        // Загружаем все команды для проверки уникальности
+        teamApi.getAll().then(res => setAllTeams(res.data));
+    }, []);
 
     useEffect(() => {
         if (initialData) {
@@ -19,12 +25,13 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
         } else {
             setForm({ name: '', city: '' });
         }
-        setErrors({ name: '', city: '' });
+        setErrors({ name: '', city: '', duplicate: '' });
     }, [initialData]);
 
     const validate = () => {
         let valid = true;
-        const newErrors = { name: '', city: '' };
+        const newErrors = { name: '', city: '', duplicate: '' };
+
         if (!form.name.trim()) {
             newErrors.name = 'Название обязательно';
             valid = false;
@@ -32,10 +39,25 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
             newErrors.name = 'Название не более 15 символов';
             valid = false;
         }
+
         if (!form.city.trim()) {
             newErrors.city = 'Город обязателен';
             valid = false;
         }
+
+        // Проверка: нет ли уже команды с таким же названием в этом городе
+        if (form.name.trim() && form.city.trim()) {
+            const duplicate = allTeams.find(team =>
+                team.name.toLowerCase() === form.name.trim().toLowerCase() &&
+                team.city.toLowerCase() === form.city.trim().toLowerCase() &&
+                (initialData ? team.id !== initialData.id : true)
+            );
+            if (duplicate) {
+                newErrors.duplicate = `Команда "${form.name}" из города "${form.city}" уже существует`;
+                valid = false;
+            }
+        }
+
         setErrors(newErrors);
         return valid;
     };
@@ -53,9 +75,14 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
             onSuccess();
             if (!initialData) setForm({ name: '', city: '' });
             onCancel();
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            alert('Ошибка сохранения команды');
+            const message = err.response?.data?.message || 'Ошибка сохранения команды';
+            if (message.toLowerCase().includes('уже существует')) {
+                setErrors(prev => ({ ...prev, duplicate: message }));
+            } else {
+                alert(message);
+            }
         } finally {
             setSubmitting(false);
         }
@@ -64,7 +91,11 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
     return (
         <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                {/* Поле Название */}
+                {errors.duplicate && (
+                    <div style={{ color: 'var(--danger)', fontSize: '0.9rem', textAlign: 'center', background: 'rgba(231,76,60,0.1)', padding: '0.5rem', borderRadius: '0.5rem' }}>
+                        ⚠️ {errors.duplicate}
+                    </div>
+                )}
                 <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
                         🏷️ Название команды <span style={{ color: 'var(--danger)' }}>*</span>
@@ -73,7 +104,10 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
                         <input
                             type="text"
                             value={form.name}
-                            onChange={e => setForm({ ...form, name: e.target.value })}
+                            onChange={e => {
+                                setForm({ ...form, name: e.target.value });
+                                setErrors(prev => ({ ...prev, name: '', duplicate: '' }));
+                            }}
                             placeholder="Например: Динамо"
                             style={{
                                 width: '100%',
@@ -93,7 +127,6 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
                     </div>
                 </div>
 
-                {/* Поле Город */}
                 <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
                         📍 Город <span style={{ color: 'var(--danger)' }}>*</span>
@@ -102,7 +135,10 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
                         <input
                             type="text"
                             value={form.city}
-                            onChange={e => setForm({ ...form, city: e.target.value })}
+                            onChange={e => {
+                                setForm({ ...form, city: e.target.value });
+                                setErrors(prev => ({ ...prev, city: '', duplicate: '' }));
+                            }}
                             placeholder="Например: Минск"
                             style={{
                                 width: '100%',
@@ -122,7 +158,6 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
                     </div>
                 </div>
 
-                {/* Кнопки */}
                 <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
                     {initialData && (
                         <button

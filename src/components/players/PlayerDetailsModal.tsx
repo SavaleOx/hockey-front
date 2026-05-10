@@ -1,7 +1,119 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { playerApi, statisticApi } from '../../services/api';
 import { Modal } from '../common/Modal';
 import type { PlayerResponseDto, StatisticResponseDto, AchievementResponseDto } from '../../types/index';
+
+// Маппинг позиций на русский язык
+const getRussianPosition = (positionName: string): string => {
+    switch (positionName) {
+        case 'GOALKEEPER': return 'Вратарь';
+        case 'DEFENDER': return 'Защитник';
+        case 'FORWARD': return 'Нападающий';
+        default: return positionName;
+    }
+};
+
+// Компонент тултипа с порталом
+const TooltipPortal = ({ children, targetRef }: { children: ReactNode; targetRef: React.RefObject<HTMLElement> }) => {
+    const [position, setPosition] = useState({ top: 0, left: 0 });
+    const [visible, setVisible] = useState(false);
+    const [isHovering, setIsHovering] = useState(false);
+    const timeoutRef = useRef<number | null>(null);
+
+    useEffect(() => {
+        const element = targetRef.current;
+        if (!element) return;
+
+        const showTooltip = () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            setIsHovering(true);
+            const rect = element.getBoundingClientRect();
+            setPosition({
+                top: rect.top - 8,
+                left: rect.left + rect.width / 2,
+            });
+            setVisible(true);
+        };
+
+        const hideTooltip = () => {
+            timeoutRef.current = window.setTimeout(() => {
+                setIsHovering(false);
+                setVisible(false);
+            }, 100);
+        };
+
+        element.addEventListener('mouseenter', showTooltip);
+        element.addEventListener('mouseleave', hideTooltip);
+
+        return () => {
+            element.removeEventListener('mouseenter', showTooltip);
+            element.removeEventListener('mouseleave', hideTooltip);
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+    }, [targetRef]);
+
+    if (!visible && !isHovering) return null;
+
+    return createPortal(
+        <div
+            style={{
+                position: 'fixed',
+                top: position.top,
+                left: position.left,
+                transform: 'translateX(-50%) translateY(-100%)',
+                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                color: '#fff',
+                padding: '0.5rem 0.75rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.8rem',
+                maxWidth: '280px',
+                whiteSpace: 'normal',
+                wordWrap: 'break-word',
+                zIndex: 10000,
+                pointerEvents: 'none',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                transition: 'opacity 0.15s ease',
+                opacity: visible ? 1 : 0,
+            }}
+        >
+            {children}
+            {/* Маленький треугольник снизу */}
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: '-6px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 0,
+                    height: 0,
+                    borderLeft: '6px solid transparent',
+                    borderRight: '6px solid transparent',
+                    borderTop: '6px solid rgba(0, 0, 0, 0.9)',
+                }}
+            />
+        </div>,
+        document.body
+    );
+};
+
+// Компонент бейджа с тултипом
+const AchievementBadge = ({ name, description }: { name: string; description?: string }) => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    return (
+        <>
+            <div
+                ref={ref}
+                className="achievement-badge"
+                style={{ cursor: 'help' }}
+            >
+                {name}
+            </div>
+            {description && <TooltipPortal targetRef={ref}>{description}</TooltipPortal>}
+        </>
+    );
+};
 
 interface Props {
     playerId: number;
@@ -24,7 +136,9 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
                     playerApi.getPlayerAchievements(playerId),
                 ]);
                 setPlayer(playerRes.data);
-                setStats(statsRes.data);
+                // Сортируем статистику по убыванию сезона
+                const sortedStats = [...statsRes.data].sort((a, b) => b.season - a.season);
+                setStats(sortedStats);
                 setAchievements(achRes.data);
             } catch (err) {
                 console.error(err);
@@ -56,11 +170,11 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
                     >
                         <div><strong>Номер:</strong> #{player.number}</div>
                         <div><strong>Возраст:</strong> {player.age} лет</div>
-                        <div><strong>Позиция:</strong> {player.positionName}</div>
+                        <div><strong>Позиция:</strong> {getRussianPosition(player.positionName)}</div>
                         <div><strong>Команда:</strong> {player.teamName}</div>
-                        <div><strong>Голы:</strong> {player.goals}</div>
-                        <div><strong>Передачи:</strong> {player.assists}</div>
-                        <div><strong>Очки:</strong> {player.points}</div>
+                        <div><strong>Голы:</strong> 🏒 {player.goals}</div>
+                        <div><strong>Передачи:</strong> 🎯 {player.assists}</div>
+                        <div><strong>Очки:</strong> ⭐ {player.points}</div>
                     </div>
 
                     {/* Статистика по сезонам */}
@@ -78,23 +192,24 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
                                             fontSize: '0.9rem',
                                         }}
                                     >
-                                        <strong>{s.season}</strong>: {s.games} игр, ⚽ {s.goals} голов, 🎯 {s.assists} передач, 🏆 {s.points} очков
+                                        <strong>{s.season}</strong>: {s.games} игр, 🏒 {s.goals} голов, 🎯 {s.assists} передач, ⭐ {s.points} очков
                                     </div>
                                 ))}
                             </div>
                         </div>
                     )}
 
-                    {/* Достижения – теперь бейджи с тултипом */}
+                    {/* Достижения – с красивым тултипом через Portal */}
                     {achievements.length > 0 && (
                         <div>
                             <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>🏆 Достижения</h3>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                                 {achievements.map(ach => (
-                                    <div key={ach.id} className="achievement-badge">
-                                        {ach.name}
-                                        {ach.description && <span className="tooltip">{ach.description}</span>}
-                                    </div>
+                                    <AchievementBadge
+                                        key={ach.id}
+                                        name={ach.name}
+                                        description={ach.description}
+                                    />
                                 ))}
                             </div>
                         </div>

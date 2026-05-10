@@ -9,6 +9,16 @@ import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Modal } from '../common/Modal';
 import type { PlayerResponseDto, TeamResponseDto } from '../../types/index';
 
+// Маппинг позиций на русский язык
+const getRussianPosition = (positionName: string): string => {
+    switch (positionName) {
+        case 'GOALKEEPER': return 'Вратарь';
+        case 'DEFENDER': return 'Защитник';
+        case 'FORWARD': return 'Нападающий';
+        default: return positionName;
+    }
+};
+
 export const PlayerList = () => {
     const [allPlayers, setAllPlayers] = useState<PlayerResponseDto[]>([]);
     const [teams, setTeams] = useState<TeamResponseDto[]>([]);
@@ -26,7 +36,6 @@ export const PlayerList = () => {
         return (localStorage.getItem('playerViewMode') as 'grid' | 'list') || 'grid';
     });
     const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
-    // Состояние фильтров
     const [filters, setFilters] = useState<{
         teamName?: string;
         position?: string;
@@ -38,7 +47,6 @@ export const PlayerList = () => {
         maxAge?: number;
     }>({});
 
-    // Загрузка всех игроков и команд
     const fetchData = async () => {
         setLoading(true);
         try {
@@ -60,49 +68,24 @@ export const PlayerList = () => {
         fetchData();
     }, []);
 
-    // Фильтрация игроков
     useEffect(() => {
         let filtered = [...allPlayers];
-
-        // Поиск по имени (fullName)
         if (searchTerm.trim()) {
             const term = searchTerm.toLowerCase();
-            filtered = filtered.filter(p =>
-                p.fullName.toLowerCase().includes(term)
-            );
+            filtered = filtered.filter(p => p.fullName.toLowerCase().includes(term));
         }
-
-        // Фильтры из панели
-        if (filters.teamName) {
-            filtered = filtered.filter(p => p.teamName === filters.teamName);
-        }
-        if (filters.position) {
-            filtered = filtered.filter(p => p.positionName === filters.position);
-        }
-        if (filters.minGoals !== undefined) {
-            filtered = filtered.filter(p => p.goals >= filters.minGoals!);
-        }
-        if (filters.maxGoals !== undefined) {
-            filtered = filtered.filter(p => p.goals <= filters.maxGoals!);
-        }
-        if (filters.minAssists !== undefined) {
-            filtered = filtered.filter(p => p.assists >= filters.minAssists!);
-        }
-        if (filters.maxAssists !== undefined) {
-            filtered = filtered.filter(p => p.assists <= filters.maxAssists!);
-        }
-        if (filters.minAge !== undefined) {
-            filtered = filtered.filter(p => p.age >= filters.minAge!);
-        }
-        if (filters.maxAge !== undefined) {
-            filtered = filtered.filter(p => p.age <= filters.maxAge!);
-        }
-
+        if (filters.teamName) filtered = filtered.filter(p => p.teamName === filters.teamName);
+        if (filters.position) filtered = filtered.filter(p => p.positionName === filters.position);
+        if (filters.minGoals !== undefined) filtered = filtered.filter(p => p.goals >= filters.minGoals!);
+        if (filters.maxGoals !== undefined) filtered = filtered.filter(p => p.goals <= filters.maxGoals!);
+        if (filters.minAssists !== undefined) filtered = filtered.filter(p => p.assists >= filters.minAssists!);
+        if (filters.maxAssists !== undefined) filtered = filtered.filter(p => p.assists <= filters.maxAssists!);
+        if (filters.minAge !== undefined) filtered = filtered.filter(p => p.age >= filters.minAge!);
+        if (filters.maxAge !== undefined) filtered = filtered.filter(p => p.age <= filters.maxAge!);
         setFilteredPlayers(filtered);
         setPage(0);
     }, [allPlayers, searchTerm, filters]);
 
-    // Пагинация
     useEffect(() => {
         setTotalPages(Math.ceil(filteredPlayers.length / size));
     }, [filteredPlayers, size]);
@@ -114,7 +97,7 @@ export const PlayerList = () => {
             setLoading(true);
             await playerApi.delete(deleteId);
             setDeleteId(null);
-            await fetchData(); // перезагрузим всех игроков
+            await fetchData();
             setLoading(false);
         }
     };
@@ -143,11 +126,14 @@ export const PlayerList = () => {
         setSelectedPlayerId(playerId);
     };
 
-    // Сброс фильтров
     const resetFilters = () => {
         setFilters({});
         setSearchTerm('');
     };
+
+    useEffect(() => {
+        localStorage.setItem('playerViewMode', viewMode);
+    }, [viewMode]);
 
     return (
         <div style={{ padding: '1rem', maxWidth: '1280px', margin: '0 auto' }}>
@@ -159,8 +145,13 @@ export const PlayerList = () => {
                 marginBottom: '1rem',
                 gap: '1rem'
             }}>
-                <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold' }}>👥 Игроки</h1>
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    👥 Игроки
+                    <span style={{ fontSize: '0.875rem', background: 'var(--border)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
+                        {filteredPlayers.length}
+                    </span>
+                </h1>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <input
                         type="text"
                         placeholder="🔍 Поиск по имени..."
@@ -183,7 +174,6 @@ export const PlayerList = () => {
                 </div>
             </div>
 
-            {/* Блок фильтров (можно скрывать) */}
             <PlayerFilters
                 teams={teams.map(t => ({ id: t.id, name: t.name }))}
                 onFilterChange={setFilters}
@@ -196,14 +186,14 @@ export const PlayerList = () => {
             )}
 
             {viewMode === 'grid' && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                <div className="grid-view">
                     {paginatedPlayers.map(p => (
                         <div key={p.id} className="list-item" style={{ padding: '1rem', borderRadius: '0.75rem', cursor: 'pointer' }} onClick={() => handlePlayerClick(p.id)}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div>
                                     <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{p.fullName} <span style={{ fontSize: '0.8rem', background: 'var(--border)', padding: '0.1rem 0.4rem', borderRadius: '999px' }}>#{p.number}</span></h3>
-                                    <div style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>{p.positionName} • {p.teamName}</div>
-                                    <div style={{ fontSize: '0.85rem' }}>⚽ {p.goals} 🎯 {p.assists} | 🏆 {p.points}</div>
+                                    <div style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>{getRussianPosition(p.positionName)} • {p.teamName}</div>
+                                    <div style={{ fontSize: '0.85rem' }}>🏒 {p.goals} 🎯 {p.assists} | ⭐ {p.points} очков</div>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }} onClick={e => e.stopPropagation()}>
                                     <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>✏️ Редактировать</button>
@@ -217,8 +207,8 @@ export const PlayerList = () => {
             )}
 
             {viewMode === 'list' && (
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--bg-card)', borderRadius: '0.75rem' }}>
+                <div className="table-wrapper">
+                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--bg-card)', borderRadius: '0.75rem', overflow: 'hidden', minWidth: '700px' }}>
                         <thead style={{ background: 'var(--primary)', color: 'white' }}>
                             <tr>
                                 <th style={{ padding: '0.75rem', textAlign: 'left' }}>Игрок</th>
@@ -234,16 +224,16 @@ export const PlayerList = () => {
                             {paginatedPlayers.map(p => (
                                 <tr key={p.id} style={{ borderBottom: '1px solid var(--border)', cursor: 'pointer' }} onClick={() => handlePlayerClick(p.id)}>
                                     <td style={{ padding: '0.75rem' }}><strong>{p.fullName}</strong> (#{p.number})</td>
-                                    <td style={{ padding: '0.75rem' }}>{p.positionName}</td>
+                                    <td style={{ padding: '0.75rem' }}>{getRussianPosition(p.positionName)}</td>
                                     <td style={{ padding: '0.75rem' }}>{p.teamName}</td>
-                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>{p.goals}</td>
-                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>{p.assists}</td>
-                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>{p.points}</td>
+                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>🏒 {p.goals}</td>
+                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>🎯 {p.assists}</td>
+                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>⭐ {p.points}</td>
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-                                        <div style={{ display: 'flex', gap: '0.25rem', justifyContent: 'center' }}>
-                                            <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>✏️</button>
-                                            <button onClick={() => setShowAchievementsFor(p.id)} className="btn-success" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>🏅</button>
-                                            <button onClick={() => setDeleteId(p.id)} className="btn-danger" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>🗑️</button>
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                                            <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
+                                            <button onClick={() => setShowAchievementsFor(p.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🏅 Добавить</button>
+                                            <button onClick={() => setDeleteId(p.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -253,11 +243,7 @@ export const PlayerList = () => {
                 </div>
             )}
 
-            {totalPages > 1 && (
-                <div style={{ marginTop: '1.5rem' }}>
-                    <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-                </div>
-            )}
+            {totalPages > 1 && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
 
             <Modal isOpen={isModalOpen} onClose={closeModal} title={editingPlayer ? '✏️ Редактировать игрока' : '➕ Новый игрок'}>
                 <PlayerForm onSuccess={handleFormSuccess} initialData={editingPlayer} onCancel={closeModal} />

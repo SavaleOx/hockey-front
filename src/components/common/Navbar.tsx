@@ -17,7 +17,7 @@ export const Navbar = () => {
                 </div>
                 <div className="navbar-links">
                     <NavLink to="/teams" className={({ isActive }) => isActive ? 'active' : ''}>
-                        🏒 Команды
+                        🥅 Команды
                     </NavLink>
                     <NavLink to="/players" className={({ isActive }) => isActive ? 'active' : ''}>
                         👥 Игроки

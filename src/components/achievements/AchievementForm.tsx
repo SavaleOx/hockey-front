@@ -69,12 +69,17 @@ export const AchievementForm = ({ onSuccess, initialData, onCancel }: Props) => 
                     required
                     style={{
                         width: '100%',
-                        padding: '0.5rem',
+                        padding: '0.75rem 1rem',
                         border: `1px solid ${errors.name ? 'var(--danger)' : 'var(--border)'}`,
-                        borderRadius: '0.375rem',
+                        borderRadius: '0.75rem',
                         background: 'var(--bg-card)',
-                        color: 'var(--text-dark)'
+                        color: 'var(--text-dark)',
+                        fontSize: '1rem',
+                        transition: 'border 0.2s, box-shadow 0.2s',
+                        outline: 'none',
                     }}
+                    onFocus={e => (e.target.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.2)')}
+                    onBlur={e => (e.target.style.boxShadow = 'none')}
                 />
                 {errors.name && <span style={{ color: 'var(--danger)', fontSize: '0.75rem' }}>{errors.name}</span>}
             </div>
@@ -88,25 +93,61 @@ export const AchievementForm = ({ onSuccess, initialData, onCancel }: Props) => 
                     rows={3}
                     style={{
                         width: '100%',
-                        padding: '0.5rem',
+                        padding: '0.75rem 1rem',
                         border: '1px solid var(--border)',
-                        borderRadius: '0.375rem',
+                        borderRadius: '0.75rem',
                         background: 'var(--bg-card)',
                         color: 'var(--text-dark)',
+                        fontSize: '1rem',
+                        transition: 'border 0.2s, box-shadow 0.2s',
+                        outline: 'none',
                         resize: 'vertical'
                     }}
+                    onFocus={e => (e.target.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.2)')}
+                    onBlur={e => (e.target.style.boxShadow = 'none')}
                     placeholder="Необязательное описание достижения"
                 />
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
-                <button type="submit" disabled={submitting} className="btn-primary">
-                    {submitting ? 'Сохранение...' : initialData ? 'Обновить' : 'Создать'}
-                </button>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
                 {initialData && (
-                    <button type="button" onClick={onCancel} className="btn-secondary">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        style={{
+                            padding: '0.6rem 1.2rem',
+                            borderRadius: '2rem',
+                            border: 'none',
+                            background: 'var(--border)',
+                            color: 'var(--text-dark)',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            transition: 'transform 0.1s, background 0.2s',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'var(--accent-light)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'var(--border)')}
+                    >
                         Отмена
                     </button>
                 )}
+                <button
+                    type="submit"
+                    disabled={submitting}
+                    style={{
+                        padding: '0.6rem 1.8rem',
+                        borderRadius: '2rem',
+                        border: 'none',
+                        background: 'linear-gradient(135deg, var(--accent), var(--accent-light))',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        cursor: submitting ? 'not-allowed' : 'pointer',
+                        transition: 'transform 0.1s, opacity 0.2s',
+                        opacity: submitting ? 0.7 : 1,
+                    }}
+                    onMouseEnter={e => !submitting && (e.currentTarget.style.transform = 'scale(1.02)')}
+                    onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                >
+                    {submitting ? 'Сохранение...' : initialData ? 'Обновить' : 'Создать'}
+                </button>
             </div>
         </form>
     );

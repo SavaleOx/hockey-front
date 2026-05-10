@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
     teams: { id: number; name: string }[];
@@ -8,6 +8,7 @@ interface Props {
 
 export const PlayerFilters = ({ teams, onFilterChange, onReset }: Props) => {
     const [showFilters, setShowFilters] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [teamName, setTeamName] = useState('');
     const [position, setPosition] = useState('');
     const [minAge, setMinAge] = useState<number | undefined>();
@@ -16,6 +17,12 @@ export const PlayerFilters = ({ teams, onFilterChange, onReset }: Props) => {
     const [maxGoals, setMaxGoals] = useState<number | undefined>();
     const [minAssists, setMinAssists] = useState<number | undefined>();
     const [maxAssists, setMaxAssists] = useState<number | undefined>();
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const applyFilters = () => {
         onFilterChange({
@@ -57,7 +64,7 @@ export const PlayerFilters = ({ teams, onFilterChange, onReset }: Props) => {
                     {/* Первая строка: 4 поля */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)',
                         gap: '1rem',
                         marginBottom: '1rem'
                     }}>
@@ -89,7 +96,7 @@ export const PlayerFilters = ({ teams, onFilterChange, onReset }: Props) => {
                     {/* Вторая строка: 4 поля */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)',
                         gap: '1rem',
                         marginBottom: '1.5rem'
                     }}>

@@ -107,7 +107,7 @@ input, select, textarea {
   padding: 0.4rem 0.6rem;
   font-size: 0.9rem;
   background-color: white;
-  transition: border 0.2s;
+  transition: border 0.2s, box-shadow 0.2s;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -330,4 +330,57 @@ input:focus, select:focus, textarea:focus {
 /* Адаптация для тёмной темы */
 .dark .achievement-badge {
     background: linear-gradient(135deg, var(--accent), #2563eb);
+}
+
+/* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ АДАПТИВНОСТИ ===== */
+
+/* Обёртка для таблиц – горизонтальная прокрутка на мобильных */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+/* Сетка карточек – по умолчанию адаптивная */
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Мобильные стили */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .grid-view {
+    grid-template-columns: 1fr !important;
+  }
+
+  .navbar-links {
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .navbar-links a {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  .theme-toggle {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .modal-content {
+    width: 95% !important;
+    margin: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: row !important;
+    justify-content: flex-end;
+  }
 }

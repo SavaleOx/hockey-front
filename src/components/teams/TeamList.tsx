@@ -19,7 +19,6 @@ export const TeamList = () => {
     const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
     const [selectedTeamName, setSelectedTeamName] = useState('');
     const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
-    // Режим отображения: 'grid' или 'list'
     const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
         return (localStorage.getItem('teamViewMode') as 'grid' | 'list') || 'grid';
     });
@@ -93,7 +92,6 @@ export const TeamList = () => {
 
     return (
         <div style={{ padding: '1rem', maxWidth: '1280px', margin: '0 auto' }}>
-            {/* Верхняя панель с поиском, переключателем и кнопкой */}
             <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -103,12 +101,12 @@ export const TeamList = () => {
                 gap: '1rem'
             }}>
                 <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    🏒 Команды
+                    🥅 Команды
                     <span style={{ fontSize: '0.875rem', background: 'var(--border)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
                         {filteredTeams.length}
                     </span>
                 </h1>
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <input
                         type="text"
                         placeholder="Поиск по названию или городу..."
@@ -124,31 +122,16 @@ export const TeamList = () => {
                             fontSize: '1rem'
                         }}
                     />
-                    {/* Переключатель вида */}
                     <div style={{ display: 'flex', gap: '0.25rem', background: 'var(--bg-card)', borderRadius: '0.5rem', border: '1px solid var(--border)' }}>
                         <button
                             onClick={() => setViewMode('grid')}
-                            style={{
-                                padding: '0.5rem 0.75rem',
-                                background: viewMode === 'grid' ? 'var(--accent)' : 'transparent',
-                                border: 'none',
-                                borderRadius: '0.5rem 0 0 0.5rem',
-                                cursor: 'pointer',
-                                color: viewMode === 'grid' ? 'white' : 'var(--text-dark)'
-                            }}
+                            style={{ padding: '0.5rem 0.75rem', background: viewMode === 'grid' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0.5rem 0 0 0.5rem', cursor: 'pointer', color: viewMode === 'grid' ? 'white' : 'var(--text-dark)' }}
                         >
                             📱 Сетка
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            style={{
-                                padding: '0.5rem 0.75rem',
-                                background: viewMode === 'list' ? 'var(--accent)' : 'transparent',
-                                border: 'none',
-                                borderRadius: '0 0.5rem 0.5rem 0',
-                                cursor: 'pointer',
-                                color: viewMode === 'list' ? 'white' : 'var(--text-dark)'
-                            }}
+                            style={{ padding: '0.5rem 0.75rem', background: viewMode === 'list' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0 0.5rem 0.5rem 0', cursor: 'pointer', color: viewMode === 'list' ? 'white' : 'var(--text-dark)' }}
                         >
                             📋 Список
                         </button>
@@ -166,12 +149,10 @@ export const TeamList = () => {
                 </div>
             )}
 
-            {/* Рендер в зависимости от viewMode */}
             {viewMode === 'grid' && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                <div className="grid-view">
                     {filteredTeams.map(team => (
                         <div key={team.id} className="list-item" style={{ padding: '1.25rem', borderRadius: '0.75rem', transition: 'all 0.2s' }}>
-                            {/* содержимое карточки как раньше */}
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div style={{ cursor: 'pointer', flex: 1 }} onClick={() => handleTeamClick(team.id, team.name)}>
                                     <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -185,7 +166,7 @@ export const TeamList = () => {
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginLeft: '1rem' }}>
                                     <button onClick={() => openEditModal(team)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
-                                    <button onClick={() => setBulkTeamId(team.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>📦 Добавить</button>
+                                    <button onClick={() => setBulkTeamId(team.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>👥 Добавить игроков</button>
                                     <button onClick={() => setDeleteId(team.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
                                 </div>
                             </div>
@@ -195,8 +176,8 @@ export const TeamList = () => {
             )}
 
             {viewMode === 'list' && (
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--bg-card)', borderRadius: '0.75rem', overflow: 'hidden' }}>
+                <div className="table-wrapper">
+                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--bg-card)', borderRadius: '0.75rem', overflow: 'hidden', minWidth: '600px' }}>
                         <thead style={{ background: 'var(--primary)', color: 'white' }}>
                             <tr>
                                 <th style={{ padding: '0.75rem', textAlign: 'left' }}>Название</th>
@@ -214,13 +195,13 @@ export const TeamList = () => {
                                     <td style={{ padding: '0.75rem' }}>{team.coachFullName || '—'}</td>
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>{team.playerIds.length}</td>
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                            <button onClick={() => openEditModal(team)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️</button>
-                                            <button onClick={() => setBulkTeamId(team.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>📦</button>
-                                            <button onClick={() => setDeleteId(team.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️</button>
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                                            <button onClick={() => openEditModal(team)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
+                                            <button onClick={() => setBulkTeamId(team.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>👥 Добавить игроков</button>
+                                            <button onClick={() => setDeleteId(team.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
                                         </div>
                                     </td>
-                                 </tr>
+                                </tr>
                             ))}
                         </tbody>
                     </table>

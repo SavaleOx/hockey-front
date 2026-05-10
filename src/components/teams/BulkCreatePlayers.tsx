@@ -18,12 +18,22 @@ interface TempPlayer {
     position: 'GOALKEEPER' | 'DEFENDER' | 'FORWARD';
 }
 
+type RowErrors = {
+    [key: number]: {
+        name?: string;
+        surname?: string;
+        number?: string;
+        age?: string;
+    };
+};
+
 export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Props) => {
     const [players, setPlayers] = useState<TempPlayer[]>([
         { id: Date.now(), name: '', surname: '', number: 0, age: 0, position: 'FORWARD' }
     ]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [globalError, setGlobalError] = useState('');
+    const [rowErrors, setRowErrors] = useState<RowErrors>({});
 
     const addPlayer = () => {
         setPlayers([
@@ -35,29 +45,89 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
     const removePlayer = (id: number) => {
         if (players.length > 1) {
             setPlayers(players.filter(p => p.id !== id));
+            const newRowErrors = { ...rowErrors };
+            delete newRowErrors[id];
+            setRowErrors(newRowErrors);
         } else {
-            setError('Должен быть хотя бы один игрок');
+            setGlobalError('Должен быть хотя бы один игрок');
         }
     };
 
-    const updatePlayer = (id: number, field: keyof TempPlayer, value: string | number) => {
+    const updatePlayer = (id: number, field: 'name' | 'surname' | 'position', value: string) => {
         setPlayers(players.map(p => p.id === id ? { ...p, [field]: value } : p));
+        if (rowErrors[id]?.[field]) {
+            const newRowErrors = { ...rowErrors };
+            delete newRowErrors[id][field];
+            if (Object.keys(newRowErrors[id]).length === 0) {
+                delete newRowErrors[id];
+            }
+            setRowErrors(newRowErrors);
+        }
     };
 
-    const validate = () => {
+    // Запрещаем ввод минуса — разрешаем только цифры
+    const updateNumericField = (id: number, field: 'number' | 'age', value: string) => {
+        const cleaned = value.replace(/[^\d]/g, '');
+        const num = cleaned === '' ? 0 : parseInt(cleaned, 10);
+        setPlayers(players.map(p => p.id === id ? { ...p, [field]: num } : p));
+        if (rowErrors[id]?.[field]) {
+            const newRowErrors = { ...rowErrors };
+            delete newRowErrors[id][field];
+            if (Object.keys(newRowErrors[id]).length === 0) {
+                delete newRowErrors[id];
+            }
+            setRowErrors(newRowErrors);
+        }
+    };
+
+    const validateAndClean = () => {
+        let isValid = true;
+        const newRowErrors: RowErrors = {};
+
         for (let i = 0; i < players.length; i++) {
             const p = players[i];
-            if (!p.name.trim() || !p.surname.trim() || p.number <= 0 || p.age < 16 || p.age > 50) {
-                setError(`Ошибка в строке ${i + 1}: заполните все поля (имя, фамилия, номер >0, возраст 16-50)`);
-                return false;
+            const errorsForRow: any = {};
+
+            if (!p.name.trim()) {
+                errorsForRow.name = 'Имя обязательно';
+                isValid = false;
+            }
+            if (!p.surname.trim()) {
+                errorsForRow.surname = 'Фамилия обязательна';
+                isValid = false;
+            }
+
+            if (p.number < 1 || p.number > 99) {
+                errorsForRow.number = 'Номер должен быть от 1 до 99. Поле очищено.';
+                p.number = 0;
+                isValid = false;
+            }
+
+            if (p.age < 16 || p.age > 50) {
+                errorsForRow.age = 'Возраст должен быть от 16 до 50. Поле очищено.';
+                p.age = 0;
+                isValid = false;
+            }
+
+            if (Object.keys(errorsForRow).length > 0) {
+                newRowErrors[p.id] = errorsForRow;
             }
         }
-        setError('');
-        return true;
+
+        setRowErrors(newRowErrors);
+        setPlayers([...players]);
+
+        if (!isValid) {
+            setGlobalError('Пожалуйста, исправьте ошибки в форме');
+        } else {
+            setGlobalError('');
+        }
+
+        return isValid;
     };
 
     const handleSubmit = async () => {
-        if (!validate()) return;
+        if (!validateAndClean()) return;
         setLoading(true);
         try {
             const dtoList: PlayerRequestDto[] = players.map(p => ({
@@ -74,7 +144,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
             onSuccess();
             onClose();
         } catch (err: any) {
-            setError(err.response?.data?.message || err.message || 'Ошибка сохранения игроков');
+            setGlobalError(err.response?.data?.message || err.message || 'Ошибка сохранения игроков');
         } finally {
             setLoading(false);
         }
@@ -112,7 +182,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                 }}>
                     <div>
                         <h2 style={{ margin: 0, fontSize: '1.4rem' }}>
-                            📦 Массовое добавление игроков
+                            👥 Массовое добавление игроков
                         </h2>
                         <p style={{ margin: '0.25rem 0 0', opacity: 0.9, fontSize: '0.85rem' }}>
                             в команду <strong>{teamName || `ID ${teamId}`}</strong>
@@ -141,96 +211,123 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                     </button>
                 </div>
 
-                <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
-                    <div style={{ marginBottom: '1rem' }}>
-                        <button onClick={addPlayer} className="btn-success" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            ➕ Добавить игрока
-                        </button>
-                    </div>
+                <div style={{
+                    padding: '1rem 1.5rem',
+                    borderBottom: '1px solid var(--border)',
+                    background: 'var(--bg-card)',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 10,
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                }}>
+                    <button onClick={addPlayer} className="btn-success" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        ➕ Добавить игрока
+                    </button>
+                </div>
 
+                <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
                     <div style={{ overflowX: 'auto' }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
                                 <tr style={{ borderBottom: '2px solid var(--border)' }}>
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Имя</th>
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Фамилия</th>
-                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Номер</th>
-                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Возраст</th>
+                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Номер (1-99)</th>
+                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Возраст (16-50)</th>
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Позиция</th>
                                     <th style={{ padding: '0.5rem' }}></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {players.map(p => (
-                                    <tr key={p.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                                        <td style={{ padding: '0.5rem' }}>
-                                            <input
-                                                type="text"
-                                                value={p.name}
-                                                onChange={e => updatePlayer(p.id, 'name', e.target.value)}
-                                                placeholder="Имя"
-                                                style={{ width: '100%', minWidth: '80px' }}
-                                            />
-                                        </td>
-                                        <td style={{ padding: '0.5rem' }}>
-                                            <input
-                                                type="text"
-                                                value={p.surname}
-                                                onChange={e => updatePlayer(p.id, 'surname', e.target.value)}
-                                                placeholder="Фамилия"
-                                                style={{ width: '100%', minWidth: '100px' }}
-                                            />
-                                        </td>
-                                        <td style={{ padding: '0.5rem' }}>
-                                            <input
-                                                type="number"
-                                                min="1"
-                                                max="99"
-                                                value={p.number || ''}
-                                                onChange={e => updatePlayer(p.id, 'number', Number(e.target.value))}
-                                                placeholder="№"
-                                                style={{ width: '70px' }}
-                                            />
-                                        </td>
-                                        <td style={{ padding: '0.5rem' }}>
-                                            <input
-                                                type="number"
-                                                min="16"
-                                                max="50"
-                                                value={p.age || ''}
-                                                onChange={e => updatePlayer(p.id, 'age', Number(e.target.value))}
-                                                placeholder="Возраст"
-                                                style={{ width: '80px' }}
-                                            />
-                                        </td>
-                                        <td style={{ padding: '0.5rem' }}>
-                                            <select
-                                                value={p.position}
-                                                onChange={e => updatePlayer(p.id, 'position', e.target.value as any)}
-                                                style={{ width: '130px' }}
-                                            >
-                                                <option value="GOALKEEPER">Вратарь</option>
-                                                <option value="DEFENDER">Защитник</option>
-                                                <option value="FORWARD">Нападающий</option>
-                                            </select>
-                                        </td>
-                                        <td style={{ padding: '0.5rem', textAlign: 'center' }}>
-                                            <button
-                                                onClick={() => removePlayer(p.id)}
-                                                className="btn-danger"
-                                                style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}
-                                                title="Удалить игрока"
-                                            >
-                                                🗑️
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {players.map(p => {
+                                    const errors = rowErrors[p.id] || {};
+                                    return (
+                                        <tr key={p.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                                            <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
+                                                <input
+                                                    type="text"
+                                                    value={p.name}
+                                                    onChange={e => updatePlayer(p.id, 'name', e.target.value)}
+                                                    placeholder="Имя"
+                                                    style={{
+                                                        width: '100%',
+                                                        minWidth: '80px',
+                                                        borderColor: errors.name ? 'var(--danger)' : undefined
+                                                    }}
+                                                />
+                                                {errors.name && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.name}</div>}
+                                            </td>
+                                            <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
+                                                <input
+                                                    type="text"
+                                                    value={p.surname}
+                                                    onChange={e => updatePlayer(p.id, 'surname', e.target.value)}
+                                                    placeholder="Фамилия"
+                                                    style={{
+                                                        width: '100%',
+                                                        minWidth: '100px',
+                                                        borderColor: errors.surname ? 'var(--danger)' : undefined
+                                                    }}
+                                                />
+                                                {errors.surname && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.surname}</div>}
+                                            </td>
+                                            <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
+                                                <input
+                                                    type="text"
+                                                    inputMode="numeric"
+                                                    value={p.number === 0 ? '' : p.number}
+                                                    onChange={e => updateNumericField(p.id, 'number', e.target.value)}
+                                                    placeholder="№"
+                                                    style={{
+                                                        width: '80px',
+                                                        borderColor: errors.number ? 'var(--danger)' : undefined
+                                                    }}
+                                                />
+                                                {errors.number && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.number}</div>}
+                                             </td>
+                                            <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
+                                                <input
+                                                    type="text"
+                                                    inputMode="numeric"
+                                                    value={p.age === 0 ? '' : p.age}
+                                                    onChange={e => updateNumericField(p.id, 'age', e.target.value)}
+                                                    placeholder="Возраст"
+                                                    style={{
+                                                        width: '100px',
+                                                        borderColor: errors.age ? 'var(--danger)' : undefined
+                                                    }}
+                                                />
+                                                {errors.age && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.age}</div>}
+                                             </td>
+                                            <td style={{ padding: '0.5rem' }}>
+                                                <select
+                                                    value={p.position}
+                                                    onChange={e => updatePlayer(p.id, 'position', e.target.value)}
+                                                    style={{ width: '130px' }}
+                                                >
+                                                    <option value="GOALKEEPER">Вратарь</option>
+                                                    <option value="DEFENDER">Защитник</option>
+                                                    <option value="FORWARD">Нападающий</option>
+                                                </select>
+                                             </td>
+                                            <td style={{ padding: '0.5rem', textAlign: 'center' }}>
+                                                <button
+                                                    onClick={() => removePlayer(p.id)}
+                                                    className="btn-danger"
+                                                    style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}
+                                                    title="Удалить игрока"
+                                                >
+                                                    🗑️
+                                                </button>
+                                             </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
 
-                    {error && <div style={{ color: 'var(--danger)', marginTop: '1rem', fontSize: '0.85rem' }}>{error}</div>}
+                    {globalError && <div style={{ color: 'var(--danger)', marginTop: '1rem', fontSize: '0.85rem' }}>{globalError}</div>}
                 </div>
 
                 <div style={{

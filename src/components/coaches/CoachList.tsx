@@ -82,8 +82,13 @@ export const CoachList = () => {
                 marginBottom: '1rem',
                 gap: '1rem'
             }}>
-                <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold' }}>🧑‍🏫 Тренеры</h1>
-                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    🧑‍🏫 Тренеры
+                    <span style={{ fontSize: '0.875rem', background: 'var(--border)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
+                        {filteredCoaches.length}
+                    </span>
+                </h1>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <input
                         type="text"
                         placeholder="🔍 Поиск по имени или фамилии..."
@@ -112,7 +117,7 @@ export const CoachList = () => {
             )}
 
             {viewMode === 'grid' && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                <div className="grid-view">
                     {filteredCoaches.map(c => (
                         <div key={c.id} className="list-item" style={{ padding: '1rem', borderRadius: '0.75rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -123,12 +128,8 @@ export const CoachList = () => {
                                     <div style={{ fontSize: '0.85rem', opacity: 0.8 }}>Тактика: {c.tactic || '—'}</div>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginLeft: '1rem' }}>
-                                    <button onClick={() => openEditModal(c)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>
-                                        Редактировать
-                                    </button>
-                                    <button onClick={() => setDeleteId(c.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>
-                                        🗑️ Удалить
-                                    </button>
+                                    <button onClick={() => openEditModal(c)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
+                                    <button onClick={() => setDeleteId(c.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
                                 </div>
                             </div>
                         </div>
@@ -137,8 +138,8 @@ export const CoachList = () => {
             )}
 
             {viewMode === 'list' && (
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--bg-card)', borderRadius: '0.75rem' }}>
+                <div className="table-wrapper">
+                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--bg-card)', borderRadius: '0.75rem', overflow: 'hidden', minWidth: '600px' }}>
                         <thead style={{ background: 'var(--primary)', color: 'white' }}>
                             <tr>
                                 <th style={{ padding: '0.75rem', textAlign: 'left' }}>Тренер</th>
@@ -156,9 +157,9 @@ export const CoachList = () => {
                                     <td style={{ padding: '0.75rem' }}>{c.teamName}</td>
                                     <td style={{ padding: '0.75rem' }}>{c.tactic || '—'}</td>
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>
-                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                            <button onClick={() => openEditModal(c)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️</button>
-                                            <button onClick={() => setDeleteId(c.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️</button>
+                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                                            <button onClick={() => openEditModal(c)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
+                                            <button onClick={() => setDeleteId(c.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
                                         </div>
                                     </td>
                                 </tr>
