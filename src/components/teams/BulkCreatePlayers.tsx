@@ -236,7 +236,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Возраст (16-50)</th>
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Позиция</th>
                                     <th style={{ padding: '0.5rem' }}></th>
-                                </tr>
+                                </table>
                             </thead>
                             <tbody>
                                 {players.map(p => {
@@ -319,14 +319,13 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                                 >
                                                     🗑️
                                                 </button>
-                                             <tr>
+                                             </td>
                                         </tr>
                                     );
                                 })}
                             </tbody>
                         </table>
                     </div>
-
                     {globalError && <div style={{ color: 'var(--danger)', marginTop: '1rem', fontSize: '0.85rem' }}>{globalError}</div>}
                 </div>
 
