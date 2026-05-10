@@ -16,7 +16,7 @@ import type {
 } from '../types/index';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8081',
+    baseURL: 'https://hockeyteam.onrender.com',
     headers: { 'Content-Type': 'application/json' }
 });
 
