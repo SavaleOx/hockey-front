@@ -68,11 +68,11 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
 
     // Валидация конкретного поля
     const validateField = (field: string, value: number): string | undefined => {
-        if (field === 'goals' && value > 150) {
-            return 'Голов не может быть больше 150 за сезон';
+        if (field === 'goals' && value > 100) {
+            return 'Голов не может быть больше 100 за сезон';
         }
-        if (field === 'assists' && value > 150) {
-            return 'Передач не может быть больше 150 за сезон';
+        if (field === 'assists' && value > 100) {
+            return 'Передач не может быть больше 100 за сезон';
         }
         if (field === 'games' && value < 0) {
             return 'Игры не могут быть отрицательными';
@@ -83,7 +83,7 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
     const handleNumberChange = (field: 'goals' | 'assists' | 'games', value: string) => {
         const num = value === '' ? 0 : Number(value);
 
-        // Проверяем, не превышает ли значение 150 (для голов и передач)
+        // Проверяем, не превышает ли значение 100 (для голов и передач)
         const error = validateField(field, num);
         if (error) {
             setErrors(prev => ({ ...prev, [field]: error }));
@@ -128,8 +128,8 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
         if (form.goals < 0) newErrors.goals = 'Голы не могут быть отрицательными';
         if (form.assists < 0) newErrors.assists = 'Передачи не могут быть отрицательными';
 
-        if (form.goals > 150) newErrors.goals = 'Голов не может быть больше 150 за сезон';
-        if (form.assists > 150) newErrors.assists = 'Передач не может быть больше 150 за сезон';
+        if (form.goals > 100) newErrors.goals = 'Голов не может быть больше 100 за сезон';
+        if (form.assists > 100) newErrors.assists = 'Передач не может быть больше 100 за сезон';
 
         setErrors(newErrors);
         setDuplicateError(newErrors.season || '');
@@ -207,11 +207,11 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
                     {errors.games && <span style={{ color: 'var(--danger)', fontSize: '0.75rem' }}>{errors.games}</span>}
                 </div>
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Голы (макс. 150) *</label>
+                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Голы (макс. 100) *</label>
                     <input
                         type="number"
                         min="0"
-                        max="150"
+                        max="100"
                         value={form.goals}
                         onChange={e => handleNumberChange('goals', e.target.value)}
                         required
@@ -220,11 +220,11 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
                     {errors.goals && <span style={{ color: 'var(--danger)', fontSize: '0.75rem' }}>{errors.goals}</span>}
                 </div>
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Передачи (макс. 150) *</label>
+                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Передачи (макс. 100) *</label>
                     <input
                         type="number"
                         min="0"
-                        max="150"
+                        max="100"
                         value={form.assists}
                         onChange={e => handleNumberChange('assists', e.target.value)}
                         required
