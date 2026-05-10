@@ -236,7 +236,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Возраст (16-50)</th>
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Позиция</th>
                                     <th style={{ padding: '0.5rem' }}></th>
-                                </table>
+                                </tr>
                             </thead>
                             <tbody>
                                 {players.map(p => {
@@ -284,7 +284,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                                     }}
                                                 />
                                                 {errors.number && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.number}</div>}
-                                             </td>
+                                            </td>
                                             <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
                                                 <input
                                                     type="text"
@@ -298,7 +298,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                                     }}
                                                 />
                                                 {errors.age && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.age}</div>}
-                                             </td>
+                                            </td>
                                             <td style={{ padding: '0.5rem' }}>
                                                 <select
                                                     value={p.position}
@@ -309,7 +309,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                                     <option value="DEFENDER">Защитник</option>
                                                     <option value="FORWARD">Нападающий</option>
                                                 </select>
-                                             </td>
+                                            </td>
                                             <td style={{ padding: '0.5rem', textAlign: 'center' }}>
                                                 <button
                                                     onClick={() => removePlayer(p.id)}
@@ -319,7 +319,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                                 >
                                                     🗑️
                                                 </button>
-                                             </td>
+                                            </td>
                                         </tr>
                                     );
                                 })}
