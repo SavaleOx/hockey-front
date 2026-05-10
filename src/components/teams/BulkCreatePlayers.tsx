@@ -24,6 +24,7 @@ type RowErrors = {
         surname?: string;
         number?: string;
         age?: string;
+        position?: string;
     };
 };
 
@@ -65,7 +66,6 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
         }
     };
 
-    // Запрещаем ввод минуса — разрешаем только цифры
     const updateNumericField = (id: number, field: 'number' | 'age', value: string) => {
         const cleaned = value.replace(/[^\d]/g, '');
         const num = cleaned === '' ? 0 : parseInt(cleaned, 10);
@@ -86,7 +86,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
 
         for (let i = 0; i < players.length; i++) {
             const p = players[i];
-            const errorsForRow: any = {};
+            const errorsForRow: RowErrors[number] = {};
 
             if (!p.name.trim()) {
                 errorsForRow.name = 'Имя обязательно';
@@ -319,7 +319,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                                 >
                                                     🗑️
                                                 </button>
-                                             </td>
+                                             <tr>
                                         </tr>
                                     );
                                 })}

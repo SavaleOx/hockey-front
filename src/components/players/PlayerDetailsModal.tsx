@@ -1,10 +1,9 @@
-import { useEffect, useState, useRef, ReactNode } from 'react';
+import { useEffect, useState, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { playerApi, statisticApi } from '../../services/api';
 import { Modal } from '../common/Modal';
 import type { PlayerResponseDto, StatisticResponseDto, AchievementResponseDto } from '../../types/index';
 
-// Маппинг позиций на русский язык
 const getRussianPosition = (positionName: string): string => {
     switch (positionName) {
         case 'GOALKEEPER': return 'Вратарь';
@@ -14,8 +13,7 @@ const getRussianPosition = (positionName: string): string => {
     }
 };
 
-// Компонент тултипа с порталом
-const TooltipPortal = ({ children, targetRef }: { children: ReactNode; targetRef: React.RefObject<HTMLElement> }) => {
+const TooltipPortal = ({ children, targetRef }: { children: ReactNode; targetRef: React.RefObject<HTMLDivElement> }) => {
     const [position, setPosition] = useState({ top: 0, left: 0 });
     const [visible, setVisible] = useState(false);
     const [isHovering, setIsHovering] = useState(false);
@@ -78,7 +76,6 @@ const TooltipPortal = ({ children, targetRef }: { children: ReactNode; targetRef
             }}
         >
             {children}
-            {/* Маленький треугольник снизу */}
             <div
                 style={{
                     position: 'absolute',
@@ -97,7 +94,6 @@ const TooltipPortal = ({ children, targetRef }: { children: ReactNode; targetRef
     );
 };
 
-// Компонент бейджа с тултипом
 const AchievementBadge = ({ name, description }: { name: string; description?: string }) => {
     const ref = useRef<HTMLDivElement>(null);
 
@@ -136,7 +132,6 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
                     playerApi.getPlayerAchievements(playerId),
                 ]);
                 setPlayer(playerRes.data);
-                // Сортируем статистику по убыванию сезона
                 const sortedStats = [...statsRes.data].sort((a, b) => b.season - a.season);
                 setStats(sortedStats);
                 setAchievements(achRes.data);
@@ -157,7 +152,6 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
             {loading && <div className="loading-spinner" style={{ margin: '2rem auto' }} />}
             {!loading && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    {/* Основная информация */}
                     <div
                         style={{
                             display: 'grid',
@@ -177,7 +171,6 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
                         <div><strong>Очки:</strong> ⭐ {player.points}</div>
                     </div>
 
-                    {/* Статистика по сезонам */}
                     {stats.length > 0 && (
                         <div>
                             <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>📊 Статистика по сезонам</h3>
@@ -199,17 +192,12 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
                         </div>
                     )}
 
-                    {/* Достижения – с красивым тултипом через Portal */}
                     {achievements.length > 0 && (
                         <div>
                             <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>🏆 Достижения</h3>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                                 {achievements.map(ach => (
-                                    <AchievementBadge
-                                        key={ach.id}
-                                        name={ach.name}
-                                        description={ach.description}
-                                    />
+                                    <AchievementBadge key={ach.id} name={ach.name} description={ach.description} />
                                 ))}
                             </div>
                         </div>
