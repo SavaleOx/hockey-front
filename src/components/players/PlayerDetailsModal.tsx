@@ -13,7 +13,7 @@ const getRussianPosition = (positionName: string): string => {
     }
 };
 
-const TooltipPortal = ({ children, targetRef }: { children: ReactNode; targetRef: React.RefObject<HTMLDivElement> }) => {
+const TooltipPortal = ({ children, targetRef }: { children: ReactNode; targetRef: React.RefObject<HTMLDivElement | null> }) => {
     const [position, setPosition] = useState({ top: 0, left: 0 });
     const [visible, setVisible] = useState(false);
     const [isHovering, setIsHovering] = useState(false);
