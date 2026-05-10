@@ -27,9 +27,9 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
 
     // Минимальный сезон на основе возраста (минимальный возраст – 16 лет)
     const getMinSeason = () => {
-        if (!playerAge) return currentYear - 2; // fallback
+        if (!playerAge) return currentYear - 2;
         const minAllowedAge = 16;
-        if (playerAge < minAllowedAge) return currentYear; // слишком молод
+        if (playerAge < minAllowedAge) return currentYear;
         return currentYear - (playerAge - minAllowedAge);
     };
 
@@ -61,10 +61,39 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
     const checkDuplicateSeason = (season: number): boolean => {
         if (!existingSeasons.length) return false;
         if (editId && initialData && initialData.season === season) {
-            // Редактируем ту же самую запись – сезон не считается дубликатом
             return false;
         }
         return existingSeasons.includes(season);
+    };
+
+    // Валидация конкретного поля
+    const validateField = (field: string, value: number): string | undefined => {
+        if (field === 'goals' && value > 150) {
+            return 'Голов не может быть больше 150 за сезон';
+        }
+        if (field === 'assists' && value > 150) {
+            return 'Передач не может быть больше 150 за сезон';
+        }
+        if (field === 'games' && value < 0) {
+            return 'Игры не могут быть отрицательными';
+        }
+        return undefined;
+    };
+
+    const handleNumberChange = (field: 'goals' | 'assists' | 'games', value: string) => {
+        const num = value === '' ? 0 : Number(value);
+
+        // Проверяем, не превышает ли значение 150 (для голов и передач)
+        const error = validateField(field, num);
+        if (error) {
+            setErrors(prev => ({ ...prev, [field]: error }));
+            return;
+        }
+
+        setForm({ ...form, [field]: num });
+        if (errors[field]) {
+            setErrors(prev => ({ ...prev, [field]: undefined }));
+        }
     };
 
     const handleSeasonChange = (value: string) => {
@@ -74,12 +103,10 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
             setDuplicateError('');
             return;
         }
-        // Ограничение диапазона
         if (num < minSeason) num = minSeason;
         if (num > currentYear) num = currentYear;
         setForm({ ...form, season: num });
 
-        // Проверка дубликата
         if (checkDuplicateSeason(num)) {
             setDuplicateError(`Статистика за сезон ${num} уже существует. Используйте редактирование.`);
         } else {
@@ -89,15 +116,21 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
 
     const validate = () => {
         const newErrors: any = {};
+
         if (!form.season) newErrors.season = 'Введите сезон';
         else if (form.season < minSeason) newErrors.season = `Сезон не может быть меньше ${minSeason} (игроку должно быть не менее 16 лет)`;
         else if (form.season > currentYear) newErrors.season = `Сезон не может быть позже ${currentYear}`;
         else if (checkDuplicateSeason(form.season)) {
             newErrors.season = `Статистика за сезон ${form.season} уже существует`;
         }
+
         if (form.games < 0) newErrors.games = 'Игры не могут быть отрицательными';
         if (form.goals < 0) newErrors.goals = 'Голы не могут быть отрицательными';
         if (form.assists < 0) newErrors.assists = 'Передачи не могут быть отрицательными';
+
+        if (form.goals > 150) newErrors.goals = 'Голов не может быть больше 150 за сезон';
+        if (form.assists > 150) newErrors.assists = 'Передач не может быть больше 150 за сезон';
+
         setErrors(newErrors);
         setDuplicateError(newErrors.season || '');
         return Object.keys(newErrors).length === 0;
@@ -167,31 +200,33 @@ export const StatisticForm = ({ playerId, playerAge, existingSeasons = [], editI
                         type="number"
                         min="0"
                         value={form.games}
-                        onChange={e => setForm({ ...form, games: Number(e.target.value) })}
+                        onChange={e => handleNumberChange('games', e.target.value)}
                         required
                         style={{ width: '100%' }}
                     />
                     {errors.games && <span style={{ color: 'var(--danger)', fontSize: '0.75rem' }}>{errors.games}</span>}
                 </div>
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Голы *</label>
+                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Голы (макс. 150) *</label>
                     <input
                         type="number"
                         min="0"
+                        max="150"
                         value={form.goals}
-                        onChange={e => setForm({ ...form, goals: Number(e.target.value) })}
+                        onChange={e => handleNumberChange('goals', e.target.value)}
                         required
                         style={{ width: '100%' }}
                     />
                     {errors.goals && <span style={{ color: 'var(--danger)', fontSize: '0.75rem' }}>{errors.goals}</span>}
                 </div>
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Передачи *</label>
+                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Передачи (макс. 150) *</label>
                     <input
                         type="number"
                         min="0"
+                        max="150"
                         value={form.assists}
-                        onChange={e => setForm({ ...form, assists: Number(e.target.value) })}
+                        onChange={e => handleNumberChange('assists', e.target.value)}
                         required
                         style={{ width: '100%' }}
                     />

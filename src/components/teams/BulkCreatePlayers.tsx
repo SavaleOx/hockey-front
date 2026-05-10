@@ -28,6 +28,12 @@ type RowErrors = {
     };
 };
 
+// Функция для форматирования имени/фамилии
+const formatName = (value: string): string => {
+    if (!value) return '';
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+};
+
 export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Props) => {
     const [players, setPlayers] = useState<TempPlayer[]>([
         { id: Date.now(), name: '', surname: '', number: 0, age: 0, position: 'FORWARD' }
@@ -55,7 +61,11 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
     };
 
     const updatePlayer = (id: number, field: 'name' | 'surname' | 'position', value: string) => {
-        setPlayers(players.map(p => p.id === id ? { ...p, [field]: value } : p));
+        let newValue: string = value;
+        if (field === 'name' || field === 'surname') {
+            newValue = formatName(value);
+        }
+        setPlayers(players.map(p => p.id === id ? { ...p, [field]: newValue } : p));
         if (rowErrors[id]?.[field]) {
             const newRowErrors = { ...rowErrors };
             delete newRowErrors[id][field];
@@ -91,9 +101,16 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
             if (!p.name.trim()) {
                 errorsForRow.name = 'Имя обязательно';
                 isValid = false;
+            } else if (p.name.trim().length < 2) {
+                errorsForRow.name = 'Имя должно содержать минимум 2 символа';
+                isValid = false;
             }
+
             if (!p.surname.trim()) {
                 errorsForRow.surname = 'Фамилия обязательна';
+                isValid = false;
+            } else if (p.surname.trim().length < 2) {
+                errorsForRow.surname = 'Фамилия должна содержать минимум 2 символа';
                 isValid = false;
             }
 

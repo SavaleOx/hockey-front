@@ -83,7 +83,7 @@ export const CoachList = () => {
                 gap: '1rem'
             }}>
                 <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    🧑‍🏫 Тренеры
+                    🧑‍ Тренеры
                     <span style={{ fontSize: '0.875rem', background: 'var(--border)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
                         {filteredCoaches.length}
                     </span>

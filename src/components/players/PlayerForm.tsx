@@ -8,6 +8,12 @@ interface Props {
     onCancel: () => void;
 }
 
+// Функция для форматирования имени/фамилии (первая буква заглавная, остальные строчные)
+const formatName = (value: string): string => {
+    if (!value) return '';
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+};
+
 export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
     const [teams, setTeams] = useState<TeamResponseDto[]>([]);
     const [form, setForm] = useState<PlayerRequestDto>({
@@ -122,12 +128,21 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
         const newErrors: any = {};
         let hasError = false;
 
+        // Валидация имени
         if (!form.name.trim()) {
             newErrors.name = 'Имя обязательно';
             hasError = true;
+        } else if (form.name.trim().length < 2) {
+            newErrors.name = 'Имя должно содержать минимум 2 символа';
+            hasError = true;
         }
+
+        // Валидация фамилии
         if (!form.surname.trim()) {
             newErrors.surname = 'Фамилия обязательна';
+            hasError = true;
+        } else if (form.surname.trim().length < 2) {
+            newErrors.surname = 'Фамилия должна содержать минимум 2 символа';
             hasError = true;
         }
 
@@ -155,6 +170,22 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
 
         setErrors(newErrors);
         return !hasError;
+    };
+
+    const handleNameChange = (value: string) => {
+        const formatted = formatName(value);
+        setForm({ ...form, name: formatted });
+        if (errors.name) {
+            setErrors(prev => ({ ...prev, name: undefined }));
+        }
+    };
+
+    const handleSurnameChange = (value: string) => {
+        const formatted = formatName(value);
+        setForm({ ...form, surname: formatted });
+        if (errors.surname) {
+            setErrors(prev => ({ ...prev, surname: undefined }));
+        }
     };
 
     const handleNumberInput = (value: string) => {
@@ -215,7 +246,7 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
                     <input
                         type="text"
                         value={form.name}
-                        onChange={e => setForm({ ...form, name: e.target.value })}
+                        onChange={e => handleNameChange(e.target.value)}
                         style={{
                             width: '100%',
                             padding: '0.75rem 1rem',
@@ -237,7 +268,7 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
                     <input
                         type="text"
                         value={form.surname}
-                        onChange={e => setForm({ ...form, surname: e.target.value })}
+                        onChange={e => handleSurnameChange(e.target.value)}
                         style={{
                             width: '100%',
                             padding: '0.75rem 1rem',

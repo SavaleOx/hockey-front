@@ -23,7 +23,7 @@ export const Navbar = () => {
                         👥 Игроки
                     </NavLink>
                     <NavLink to="/coaches" className={({ isActive }) => isActive ? 'active' : ''}>
-                        🧑‍🏫 Тренеры
+                        🧑‍ Тренеры
                     </NavLink>
                     <NavLink to="/achievements" className={({ isActive }) => isActive ? 'active' : ''}>
                         🏆 Достижения
