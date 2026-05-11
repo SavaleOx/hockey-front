@@ -12,24 +12,24 @@ export const Navbar = () => {
                         Хоккейный менеджер
                     </div>
                     <button onClick={toggleTheme} className="theme-toggle">
-                        {theme === 'light' ? '🌙 Тёмная тема' : '☀️ Светлая тема'}
+                        {theme === 'light' ? 'Тёмная тема' : 'Светлая тема'}
                     </button>
                 </div>
                 <div className="navbar-links">
                     <NavLink to="/teams" className={({ isActive }) => isActive ? 'active' : ''}>
-                        🥅 Команды
+                        Команды
                     </NavLink>
                     <NavLink to="/players" className={({ isActive }) => isActive ? 'active' : ''}>
-                        👥 Игроки
+                        Игроки
                     </NavLink>
                     <NavLink to="/coaches" className={({ isActive }) => isActive ? 'active' : ''}>
-                        🧑‍ Тренеры
+                        Тренеры
                     </NavLink>
                     <NavLink to="/achievements" className={({ isActive }) => isActive ? 'active' : ''}>
-                        🏆 Достижения
+                        Достижения
                     </NavLink>
                     <NavLink to="/statistics" className={({ isActive }) => isActive ? 'active' : ''}>
-                        📊 Статистика
+                        Статистика
                     </NavLink>
                 </div>
             </div>

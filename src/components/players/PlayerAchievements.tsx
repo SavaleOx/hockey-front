@@ -47,7 +47,7 @@ export const PlayerAchievements = ({ playerId, onClose }: Props) => {
     );
 
     return (
-        <Modal isOpen={true} onClose={onClose} title="🏆 Управление достижениями">
+        <Modal isOpen={true} onClose={onClose} title="Управление достижениями">
             {loading && <div className="loading-spinner" style={{ margin: '2rem auto' }} />}
             {!loading && (
                 <>

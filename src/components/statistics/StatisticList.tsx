@@ -142,7 +142,7 @@ export const StatisticList = () => {
 
     return (
         <div style={{ padding: '1rem', maxWidth: '1280px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1rem' }}>📊 Статистика игроков</h1>
+            <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1rem' }}>Статистика игроков</h1>
 
             <div style={{
                 marginBottom: '1.5rem',
@@ -154,7 +154,7 @@ export const StatisticList = () => {
                 <label style={{ fontWeight: 'bold', marginBottom: '0.5rem', display: 'block' }}>Выберите игрока:</label>
                 <input
                     type="text"
-                    placeholder="🔍 Поиск по имени..."
+                    placeholder="Поиск по имени..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
                     style={{

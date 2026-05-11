@@ -101,7 +101,7 @@ export const TeamList = () => {
                 gap: '1rem'
             }}>
                 <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    🥅 Команды
+                    Команды
                     <span style={{ fontSize: '0.875rem', background: 'var(--border)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
                         {filteredTeams.length}
                     </span>
@@ -127,17 +127,17 @@ export const TeamList = () => {
                             onClick={() => setViewMode('grid')}
                             style={{ padding: '0.5rem 0.75rem', background: viewMode === 'grid' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0.5rem 0 0 0.5rem', cursor: 'pointer', color: viewMode === 'grid' ? 'white' : 'var(--text-dark)' }}
                         >
-                            📱 Сетка
+                            Сетка
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
                             style={{ padding: '0.5rem 0.75rem', background: viewMode === 'list' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0 0.5rem 0.5rem 0', cursor: 'pointer', color: viewMode === 'list' ? 'white' : 'var(--text-dark)' }}
                         >
-                            📋 Список
+                            Список
                         </button>
                     </div>
                     <button onClick={openCreateModal} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        ➕ Создать команду
+                        Создать команду
                     </button>
                 </div>
             </div>
@@ -160,8 +160,8 @@ export const TeamList = () => {
                                     </h3>
                                     <p style={{ color: 'var(--text-dark)', opacity: 0.8, marginTop: '0.25rem' }}>📍 {team.city}</p>
                                     <div style={{ marginTop: '0.75rem', fontSize: '0.875rem' }}>
-                                        <div>🧑‍🏫 Тренер: {team.coachFullName || 'не назначен'}</div>
-                                        <div>👥 Игроков: {team.playerIds.length}</div>
+                                        <div>Тренер: {team.coachFullName || 'не назначен'}</div>
+                                        <div>Игроков: {team.playerIds.length}</div>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginLeft: '1rem' }}>

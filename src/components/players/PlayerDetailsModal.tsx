@@ -148,7 +148,7 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
     if (!player) return null;
 
     return (
-        <Modal isOpen={true} onClose={onClose} title={`🏒 Игрок: ${player.fullName}`}>
+        <Modal isOpen={true} onClose={onClose} title={`Игрок: ${player.fullName}`}>
             {loading && <div className="loading-spinner" style={{ margin: '2rem auto' }} />}
             {!loading && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -166,9 +166,9 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
                         <div><strong>Возраст:</strong> {player.age} лет</div>
                         <div><strong>Позиция:</strong> {getRussianPosition(player.positionName)}</div>
                         <div><strong>Команда:</strong> {player.teamName}</div>
-                        <div><strong>Голы:</strong> 🏒 {player.goals}</div>
-                        <div><strong>Передачи:</strong> 🎯 {player.assists}</div>
-                        <div><strong>Очки:</strong> ⭐ {player.points}</div>
+                        <div><strong>Голы:</strong>  {player.goals}</div>
+                        <div><strong>Передачи:</strong>  {player.assists}</div>
+                        <div><strong>Очки:</strong>  {player.points}</div>
                     </div>
 
                     {stats.length > 0 && (
@@ -185,7 +185,7 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
                                             fontSize: '0.9rem',
                                         }}
                                     >
-                                        <strong>{s.season}</strong>: {s.games} игр, 🏒 {s.goals} голов, 🎯 {s.assists} передач, ⭐ {s.points} очков
+                                        <strong>{s.season}</strong>: {s.games} игр,  {s.goals} голов,  {s.assists} передач,  {s.points} очков
                                     </div>
                                 ))}
                             </div>

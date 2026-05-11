@@ -154,7 +154,7 @@ export const PlayerList = () => {
                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <input
                         type="text"
-                        placeholder="🔍 Поиск по имени..."
+                        placeholder="Поиск по имени..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                         style={{
@@ -170,7 +170,7 @@ export const PlayerList = () => {
                         <button onClick={() => setViewMode('grid')} style={{ padding: '0.5rem 0.75rem', background: viewMode === 'grid' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0.5rem 0 0 0.5rem', cursor: 'pointer', color: viewMode === 'grid' ? 'white' : 'var(--text-dark)' }}>📱 Сетка</button>
                         <button onClick={() => setViewMode('list')} style={{ padding: '0.5rem 0.75rem', background: viewMode === 'list' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0 0.5rem 0.5rem 0', cursor: 'pointer', color: viewMode === 'list' ? 'white' : 'var(--text-dark)' }}>📋 Список</button>
                     </div>
-                    <button onClick={openCreateModal} className="btn-primary">➕ Создать игрока</button>
+                    <button onClick={openCreateModal} className="btn-primary">Создать игрока</button>
                 </div>
             </div>
 
@@ -193,7 +193,7 @@ export const PlayerList = () => {
                                 <div>
                                     <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{p.fullName} <span style={{ fontSize: '0.8rem', background: 'var(--border)', padding: '0.1rem 0.4rem', borderRadius: '999px' }}>#{p.number}</span></h3>
                                     <div style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>{getRussianPosition(p.positionName)} • {p.teamName}</div>
-                                    <div style={{ fontSize: '0.85rem' }}>🏒 {p.goals} 🎯 {p.assists} | ⭐ {p.points} очков</div>
+                                    <div style={{ fontSize: '0.85rem' }}> {p.goals}  {p.assists} |  {p.points} очков</div>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }} onClick={e => e.stopPropagation()}>
                                     <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>✏️ Редактировать</button>
@@ -226,9 +226,9 @@ export const PlayerList = () => {
                                     <td style={{ padding: '0.75rem' }}><strong>{p.fullName}</strong> (#{p.number})</td>
                                     <td style={{ padding: '0.75rem' }}>{getRussianPosition(p.positionName)}</td>
                                     <td style={{ padding: '0.75rem' }}>{p.teamName}</td>
-                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>🏒 {p.goals}</td>
-                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>🎯 {p.assists}</td>
-                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}>⭐ {p.points}</td>
+                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}> {p.goals}</td>
+                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}> {p.assists}</td>
+                                    <td style={{ padding: '0.75rem', textAlign: 'center' }}> {p.points}</td>
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
                                         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                                             <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
@@ -245,7 +245,7 @@ export const PlayerList = () => {
 
             {totalPages > 1 && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} title={editingPlayer ? '✏️ Редактировать игрока' : '➕ Новый игрок'}>
+            <Modal isOpen={isModalOpen} onClose={closeModal} title={editingPlayer ? 'Редактировать игрока' : 'Новый игрок'}>
                 <PlayerForm onSuccess={handleFormSuccess} initialData={editingPlayer} onCancel={closeModal} />
             </Modal>
 
