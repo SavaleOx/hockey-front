@@ -44,7 +44,7 @@ export const TeamPlayersModal = ({ teamId, teamName, onClose, onSelectPlayer }: 
 
     const handleBulkSuccess = () => {
         setShowBulkModal(false);
-        fetchPlayers(); // обновить список после массового добавления
+        fetchPlayers();
     };
 
     return (
@@ -53,7 +53,6 @@ export const TeamPlayersModal = ({ teamId, teamName, onClose, onSelectPlayer }: 
                 <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
                     <button
                         onClick={() => setShowBulkModal(true)}
-                        className="btn-success"
                         style={{
                             padding: '0.4rem 1rem',
                             borderRadius: '2rem',
@@ -83,27 +82,25 @@ export const TeamPlayersModal = ({ teamId, teamName, onClose, onSelectPlayer }: 
                         <div
                             key={player.id}
                             onClick={() => onSelectPlayer(player.id)}
-                            className="list-item"
                             style={{
                                 padding: '0.75rem 1rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
-                                transition: 'background 0.2s',
                                 borderRadius: '0.5rem',
-                                borderBottom: '1px solid #f1f5f9'
+                                borderBottom: '1px solid #f1f5f9',
+                                transition: 'background 0.2s'
                             }}
+                            onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
+                            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                         >
                             <div>
                                 <strong>{player.fullName}</strong> <span style={{ color: '#64748b' }}>#{player.number}</span>
                                 <br />
                                 <span style={{ fontSize: '0.8rem', color: '#3b82f6' }}>{getRussianPosition(player.positionName)}</span>
                             </div>
-                            <div style={{ fontSize: '0.85rem', background: '#f8fafc', padding: '0.25rem 0.6rem', borderRadius: '1rem' }}>
-                                <span style={{ fontWeight: 500 }}>⚽ {player.goals}</span> &nbsp;|&nbsp;
-                                <span style={{ fontWeight: 500 }}>🅰️ {player.assists}</span>
-                            </div>
+                            {/* Статистика полностью убрана */}
                         </div>
                     ))}
                 </div>

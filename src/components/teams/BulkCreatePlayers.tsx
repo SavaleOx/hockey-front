@@ -176,7 +176,8 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 1000
+            zIndex: 10000,
+            pointerEvents: 'auto'
         }}>
             <div className="modal-content" style={{
                 background: 'var(--bg-card)',
