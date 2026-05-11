@@ -158,7 +158,7 @@ export const TeamList = () => {
                                     <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                         {team.name}
                                     </h3>
-                                    <p style={{ color: 'var(--text-dark)', opacity: 0.8, marginTop: '0.25rem' }}>📍 {team.city}</p>
+                                    <p style={{ color: 'var(--text-dark)', opacity: 0.8, marginTop: '0.25rem' }}>{team.city}</p>
                                     <div style={{ marginTop: '0.75rem', fontSize: '0.875rem' }}>
                                         <div>Тренер: {team.coachFullName || 'не назначен'}</div>
                                         <div>Игроков: {team.playerIds.length}</div>
