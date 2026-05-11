@@ -8,7 +8,6 @@ interface Props {
     onCancel: () => void;
 }
 
-// Функция для форматирования имени/фамилии (первая буква заглавная, остальные строчные)
 const formatName = (value: string): string => {
     if (!value) return '';
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
@@ -73,7 +72,6 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
         }
     }, [initialData, teams]);
 
-    // Загрузка игроков выбранной команды
     useEffect(() => {
         const fetchPlayersForTeam = async () => {
             if (!form.teamId || form.teamId === 0) {
@@ -93,7 +91,6 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
         fetchPlayersForTeam();
     }, [form.teamId]);
 
-    // Проверка занятости номера
     useEffect(() => {
         if (!form.teamId || form.teamId === 0 || !form.number || form.number < 1 || form.number > 99) {
             if (errors.busyNumber) {
@@ -128,21 +125,19 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
         const newErrors: any = {};
         let hasError = false;
 
-        // Валидация имени
-        if (!form.name.trim()) {
-            newErrors.name = 'Имя обязательно';
-            hasError = true;
-        } else if (form.name.trim().length < 2) {
-            newErrors.name = 'Имя должно содержать минимум 2 символа';
-            hasError = true;
-        }
-
-        // Валидация фамилии
         if (!form.surname.trim()) {
             newErrors.surname = 'Фамилия обязательна';
             hasError = true;
         } else if (form.surname.trim().length < 2) {
             newErrors.surname = 'Фамилия должна содержать минимум 2 символа';
+            hasError = true;
+        }
+
+        if (!form.name.trim()) {
+            newErrors.name = 'Имя обязательно';
+            hasError = true;
+        } else if (form.name.trim().length < 2) {
+            newErrors.name = 'Имя должно содержать минимум 2 символа';
             hasError = true;
         }
 
@@ -241,28 +236,7 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
     return (
         <form onSubmit={handleSubmit}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Имя *</label>
-                    <input
-                        type="text"
-                        value={form.name}
-                        onChange={e => handleNameChange(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: '0.75rem 1rem',
-                            border: `1px solid ${errors.name ? 'var(--danger)' : 'var(--border)'}`,
-                            borderRadius: '0.75rem',
-                            background: 'var(--bg-card)',
-                            color: 'var(--text-dark)',
-                            fontSize: '1rem',
-                            transition: 'border 0.2s, box-shadow 0.2s',
-                            outline: 'none',
-                        }}
-                        onFocus={e => (e.target.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.2)')}
-                        onBlur={e => (e.target.style.boxShadow = 'none')}
-                    />
-                    {errors.name && <span style={{ color: 'var(--danger)', fontSize: '0.75rem' }}>{errors.name}</span>}
-                </div>
+                {/* Сначала ФАМИЛИЯ */}
                 <div>
                     <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Фамилия *</label>
                     <input
@@ -285,6 +259,31 @@ export const PlayerForm = ({ onSuccess, initialData, onCancel }: Props) => {
                     />
                     {errors.surname && <span style={{ color: 'var(--danger)', fontSize: '0.75rem' }}>{errors.surname}</span>}
                 </div>
+
+                {/* Затем ИМЯ */}
+                <div>
+                    <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Имя *</label>
+                    <input
+                        type="text"
+                        value={form.name}
+                        onChange={e => handleNameChange(e.target.value)}
+                        style={{
+                            width: '100%',
+                            padding: '0.75rem 1rem',
+                            border: `1px solid ${errors.name ? 'var(--danger)' : 'var(--border)'}`,
+                            borderRadius: '0.75rem',
+                            background: 'var(--bg-card)',
+                            color: 'var(--text-dark)',
+                            fontSize: '1rem',
+                            transition: 'border 0.2s, box-shadow 0.2s',
+                            outline: 'none',
+                        }}
+                        onFocus={e => (e.target.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.2)')}
+                        onBlur={e => (e.target.style.boxShadow = 'none')}
+                    />
+                    {errors.name && <span style={{ color: 'var(--danger)', fontSize: '0.75rem' }}>{errors.name}</span>}
+                </div>
+
                 <div>
                     <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>Номер (1-99) *</label>
                     <input

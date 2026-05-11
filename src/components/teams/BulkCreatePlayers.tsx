@@ -28,7 +28,6 @@ type RowErrors = {
     };
 };
 
-// Функция для форматирования имени/фамилии
 const formatName = (value: string): string => {
     if (!value) return '';
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
@@ -98,19 +97,19 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
             const p = players[i];
             const errorsForRow: RowErrors[number] = {};
 
-            if (!p.name.trim()) {
-                errorsForRow.name = 'Имя обязательно';
-                isValid = false;
-            } else if (p.name.trim().length < 2) {
-                errorsForRow.name = 'Имя должно содержать минимум 2 символа';
-                isValid = false;
-            }
-
             if (!p.surname.trim()) {
                 errorsForRow.surname = 'Фамилия обязательна';
                 isValid = false;
             } else if (p.surname.trim().length < 2) {
                 errorsForRow.surname = 'Фамилия должна содержать минимум 2 символа';
+                isValid = false;
+            }
+
+            if (!p.name.trim()) {
+                errorsForRow.name = 'Имя обязательно';
+                isValid = false;
+            } else if (p.name.trim().length < 2) {
+                errorsForRow.name = 'Имя должно содержать минимум 2 символа';
                 isValid = false;
             }
 
@@ -171,7 +170,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
         <div className="modal-overlay" style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0,0,0,0.5)',
+            background: 'rgba(0,0,0,0.7)',
             backdropFilter: 'blur(2px)',
             display: 'flex',
             alignItems: 'center',
@@ -248,10 +247,10 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
                                 <tr style={{ borderBottom: '2px solid var(--border)' }}>
-                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Имя</th>
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Фамилия</th>
-                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Номер (1-99)</th>
-                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Возраст (16-50)</th>
+                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Имя</th>
+                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Номер</th>
+                                    <th style={{ padding: '0.5rem', textAlign: 'left' }}>Возраст</th>
                                     <th style={{ padding: '0.5rem', textAlign: 'left' }}>Позиция</th>
                                     <th style={{ padding: '0.5rem' }}></th>
                                 </tr>
@@ -261,20 +260,6 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                     const errors = rowErrors[p.id] || {};
                                     return (
                                         <tr key={p.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                                            <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
-                                                <input
-                                                    type="text"
-                                                    value={p.name}
-                                                    onChange={e => updatePlayer(p.id, 'name', e.target.value)}
-                                                    placeholder="Имя"
-                                                    style={{
-                                                        width: '100%',
-                                                        minWidth: '80px',
-                                                        borderColor: errors.name ? 'var(--danger)' : undefined
-                                                    }}
-                                                />
-                                                {errors.name && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.name}</div>}
-                                            </td>
                                             <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
                                                 <input
                                                     type="text"
@@ -288,6 +273,20 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                                     }}
                                                 />
                                                 {errors.surname && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.surname}</div>}
+                                            </td>
+                                            <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
+                                                <input
+                                                    type="text"
+                                                    value={p.name}
+                                                    onChange={e => updatePlayer(p.id, 'name', e.target.value)}
+                                                    placeholder="Имя"
+                                                    style={{
+                                                        width: '100%',
+                                                        minWidth: '80px',
+                                                        borderColor: errors.name ? 'var(--danger)' : undefined
+                                                    }}
+                                                />
+                                                {errors.name && <div style={{ color: 'var(--danger)', fontSize: '0.7rem' }}>{errors.name}</div>}
                                             </td>
                                             <td style={{ padding: '0.5rem', verticalAlign: 'top' }}>
                                                 <input
