@@ -91,7 +91,7 @@ export const AchievementPlayersModal = ({ achievementId, achievementName, onClos
                                             style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}
                                             disabled={actionLoading === p.id}
                                         >
-                                            {actionLoading === p.id ? '...' : '🗑️'}
+                                            {actionLoading === p.id ? '...' : 'Удалить'}
                                         </button>
                                     </div>
                                 ))}

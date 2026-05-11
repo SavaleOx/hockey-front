@@ -334,7 +334,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                                                     style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}
                                                     title="Удалить игрока"
                                                 >
-                                                    🗑️
+                                                    Удалить
                                                 </button>
                                             </td>
                                         </tr>
@@ -358,7 +358,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                         Отмена
                     </button>
                     <button onClick={handleSubmit} disabled={loading} className="btn-primary">
-                        {loading ? 'Загрузка...' : '📤 Добавить игроков'}
+                        {loading ? 'Загрузка...' : 'Добавить игроков'}
                     </button>
                 </div>
             </div>
