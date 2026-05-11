@@ -35,8 +35,8 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
         if (!form.name.trim()) {
             newErrors.name = 'Название обязательно';
             valid = false;
-        } else if (form.name.length > 15) {
-            newErrors.name = 'Название не более 15 символов';
+        } else if (form.name.length > 20) {
+            newErrors.name = 'Название не более 20 символов';
             valid = false;
         }
 

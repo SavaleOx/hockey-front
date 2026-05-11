@@ -19,8 +19,7 @@ const api = axios.create({
     baseURL: 'https://hockeyteam.onrender.com',
     headers: { 'Content-Type': 'application/json' }
 });
-//baseURL: 'https://hockeyteam.onrender.com',
-// ========== Achievement ==========
+
 export const achievementApi = {
     getAll: () => api.get<AchievementResponseDto[]>('/achievements'),
     getById: (id: number) => api.get<AchievementResponseDto>(`/achievements/${id}`),
@@ -32,7 +31,7 @@ export const achievementApi = {
     getPlayers: (id: number) => api.get<AchievementPlayersDto>(`/achievements/${id}/players`),
 };
 
-// ========== Coach ==========
+
 export const coachApi = {
     getAll: () => api.get<CoachResponseDto[]>('/coaches'),
     getById: (id: number) => api.get<CoachResponseDto>(`/coaches/${id}`),
@@ -43,7 +42,7 @@ export const coachApi = {
     delete: (id: number) => api.delete(`/coaches/${id}`),
 };
 
-// ========== Team ==========
+
 export const teamApi = {
     getAll: () => api.get<TeamResponseDto[]>('/teams'),
     getById: (id: number) => api.get<TeamResponseDto>(`/teams/${id}`),
@@ -55,7 +54,6 @@ export const teamApi = {
         api.post<PlayerResponseDto[]>(`/teams/${teamId}/players/bulk`, players),
 };
 
-// ========== Player ==========
 export const playerApi = {
     getAll: (params?: { teamId?: number; position?: string; minGoals?: number }) =>
         api.get<PlayerResponseDto[]>('/players', { params }),
@@ -78,7 +76,6 @@ export const playerApi = {
         api.put<PlayerResponseDto>(`/players/${playerId}/achievements`, achievementIds),
 };
 
-// ========== Statistic ==========
 export const statisticApi = {
     getByPlayer: (playerId: number, season?: number) =>
         api.get<StatisticResponseDto[]>('/statistics', { params: { playerId, season } }),

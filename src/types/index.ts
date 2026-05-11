@@ -103,7 +103,6 @@ export interface StatisticResponseDto {
     points: number;
 }
 
-// ========== ДОБАВЛЕННЫЕ ИНТЕРФЕЙСЫ ДЛЯ ДОСТИЖЕНИЙ ==========
 export interface PlayerInfoDto {
     id: number;
     fullName: string;
