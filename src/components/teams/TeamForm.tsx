@@ -15,7 +15,6 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
     const [allTeams, setAllTeams] = useState<TeamResponseDto[]>([]);
 
     useEffect(() => {
-        // Загружаем все команды для проверки уникальности
         teamApi.getAll().then(res => setAllTeams(res.data));
     }, []);
 
@@ -45,7 +44,6 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
             valid = false;
         }
 
-        // Проверка: нет ли уже команды с таким же названием в этом городе
         if (form.name.trim() && form.city.trim()) {
             const duplicate = allTeams.find(team =>
                 team.name.toLowerCase() === form.name.trim().toLowerCase() &&
@@ -90,72 +88,90 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 {errors.duplicate && (
-                    <div style={{ color: 'var(--danger)', fontSize: '0.9rem', textAlign: 'center', background: 'rgba(231,76,60,0.1)', padding: '0.5rem', borderRadius: '0.5rem' }}>
+                    <div style={{
+                        color: '#d32f2f',
+                        fontSize: '0.85rem',
+                        textAlign: 'center',
+                        background: '#ffebee',
+                        padding: '0.5rem',
+                        borderRadius: '0.5rem'
+                    }}>
                         ⚠️ {errors.duplicate}
                     </div>
                 )}
+
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
-                        🏷️ Название команды <span style={{ color: 'var(--danger)' }}>*</span>
+                    <label style={{
+                        display: 'block',
+                        marginBottom: '0.5rem',
+                        fontWeight: 500,
+                        fontSize: '0.9rem',
+                        color: '#1e293b'
+                    }}>
+                        Название команды <span style={{ color: '#d32f2f' }}>*</span>
                     </label>
-                    <div style={{ position: 'relative' }}>
-                        <input
-                            type="text"
-                            value={form.name}
-                            onChange={e => {
-                                setForm({ ...form, name: e.target.value });
-                                setErrors(prev => ({ ...prev, name: '', duplicate: '' }));
-                            }}
-                            placeholder="Например: Динамо"
-                            style={{
-                                width: '100%',
-                                padding: '0.75rem 1rem',
-                                border: `1px solid ${errors.name ? 'var(--danger)' : 'var(--border)'}`,
-                                borderRadius: '0.75rem',
-                                background: 'var(--bg-card)',
-                                color: 'var(--text-dark)',
-                                fontSize: '1rem',
-                                transition: 'border 0.2s, box-shadow 0.2s',
-                                outline: 'none',
-                            }}
-                            onFocus={e => (e.target.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.2)')}
-                            onBlur={e => (e.target.style.boxShadow = 'none')}
-                        />
-                        {errors.name && <span style={{ fontSize: '0.75rem', color: 'var(--danger)', marginTop: '0.25rem', display: 'block' }}>{errors.name}</span>}
-                    </div>
+                    <input
+                        type="text"
+                        value={form.name}
+                        onChange={e => {
+                            setForm({ ...form, name: e.target.value });
+                            setErrors(prev => ({ ...prev, name: '', duplicate: '' }));
+                        }}
+                        placeholder="Например: Динамо"
+                        style={{
+                            width: '100%',
+                            padding: '0.7rem 0',
+                            border: 'none',
+                            borderBottom: `1px solid ${errors.name ? '#d32f2f' : '#e2e8f0'}`,
+                            background: 'transparent',
+                            fontSize: '1rem',
+                            outline: 'none',
+                            transition: 'border-color 0.2s'
+                        }}
+                        onFocus={e => (e.currentTarget.style.borderBottomColor = '#3b82f6')}
+                        onBlur={e => {
+                            if (!errors.name) e.currentTarget.style.borderBottomColor = '#e2e8f0';
+                        }}
+                    />
+                    {errors.name && <span style={{ fontSize: '0.75rem', color: '#d32f2f', marginTop: '0.25rem', display: 'block' }}>{errors.name}</span>}
                 </div>
 
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
-                        Город <span style={{ color: 'var(--danger)' }}>*</span>
+                    <label style={{
+                        display: 'block',
+                        marginBottom: '0.5rem',
+                        fontWeight: 500,
+                        fontSize: '0.9rem',
+                        color: '#1e293b'
+                    }}>
+                        Город <span style={{ color: '#d32f2f' }}>*</span>
                     </label>
-                    <div style={{ position: 'relative' }}>
-                        <input
-                            type="text"
-                            value={form.city}
-                            onChange={e => {
-                                setForm({ ...form, city: e.target.value });
-                                setErrors(prev => ({ ...prev, city: '', duplicate: '' }));
-                            }}
-                            placeholder="Например: Минск"
-                            style={{
-                                width: '100%',
-                                padding: '0.75rem 1rem',
-                                border: `1px solid ${errors.city ? 'var(--danger)' : 'var(--border)'}`,
-                                borderRadius: '0.75rem',
-                                background: 'var(--bg-card)',
-                                color: 'var(--text-dark)',
-                                fontSize: '1rem',
-                                transition: 'border 0.2s, box-shadow 0.2s',
-                                outline: 'none',
-                            }}
-                            onFocus={e => (e.target.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.2)')}
-                            onBlur={e => (e.target.style.boxShadow = 'none')}
-                        />
-                        {errors.city && <span style={{ fontSize: '0.75rem', color: 'var(--danger)', marginTop: '0.25rem', display: 'block' }}>{errors.city}</span>}
-                    </div>
+                    <input
+                        type="text"
+                        value={form.city}
+                        onChange={e => {
+                            setForm({ ...form, city: e.target.value });
+                            setErrors(prev => ({ ...prev, city: '', duplicate: '' }));
+                        }}
+                        placeholder="Например: Минск"
+                        style={{
+                            width: '100%',
+                            padding: '0.7rem 0',
+                            border: 'none',
+                            borderBottom: `1px solid ${errors.city ? '#d32f2f' : '#e2e8f0'}`,
+                            background: 'transparent',
+                            fontSize: '1rem',
+                            outline: 'none',
+                            transition: 'border-color 0.2s'
+                        }}
+                        onFocus={e => (e.currentTarget.style.borderBottomColor = '#3b82f6')}
+                        onBlur={e => {
+                            if (!errors.city) e.currentTarget.style.borderBottomColor = '#e2e8f0';
+                        }}
+                    />
+                    {errors.city && <span style={{ fontSize: '0.75rem', color: '#d32f2f', marginTop: '0.25rem', display: 'block' }}>{errors.city}</span>}
                 </div>
 
                 <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
@@ -164,17 +180,17 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
                             type="button"
                             onClick={onCancel}
                             style={{
-                                padding: '0.6rem 1.2rem',
+                                padding: '0.5rem 1.2rem',
                                 borderRadius: '2rem',
-                                border: 'none',
-                                background: 'var(--border)',
-                                color: 'var(--text-dark)',
-                                fontWeight: '600',
+                                border: '1px solid #e2e8f0',
+                                background: 'transparent',
+                                color: '#475569',
+                                fontWeight: 500,
                                 cursor: 'pointer',
-                                transition: 'transform 0.1s, background 0.2s',
+                                transition: 'background 0.2s'
                             }}
-                            onMouseEnter={e => (e.currentTarget.style.background = 'var(--accent-light)')}
-                            onMouseLeave={e => (e.currentTarget.style.background = 'var(--border)')}
+                            onMouseEnter={e => (e.currentTarget.style.background = '#f1f5f9')}
+                            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                         >
                             Отмена
                         </button>
@@ -183,18 +199,18 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
                         type="submit"
                         disabled={submitting}
                         style={{
-                            padding: '0.6rem 1.8rem',
+                            padding: '0.5rem 1.8rem',
                             borderRadius: '2rem',
                             border: 'none',
-                            background: 'linear-gradient(135deg, var(--accent), var(--accent-light))',
+                            background: '#3b82f6',
                             color: 'white',
-                            fontWeight: 'bold',
+                            fontWeight: 500,
                             cursor: submitting ? 'not-allowed' : 'pointer',
-                            transition: 'transform 0.1s, opacity 0.2s',
                             opacity: submitting ? 0.7 : 1,
+                            transition: 'background 0.2s, transform 0.1s'
                         }}
-                        onMouseEnter={e => !submitting && (e.currentTarget.style.transform = 'scale(1.02)')}
-                        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                        onMouseEnter={e => !submitting && (e.currentTarget.style.background = '#2563eb')}
+                        onMouseLeave={e => !submitting && (e.currentTarget.style.background = '#3b82f6')}
                     >
                         {submitting ? 'Сохранение...' : initialData ? 'Обновить' : 'Создать'}
                     </button>
