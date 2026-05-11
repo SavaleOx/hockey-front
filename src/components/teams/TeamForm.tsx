@@ -96,7 +96,7 @@ export const TeamForm = ({ onSuccess, initialData, onCancel }: Props) => {
                 )}
                 <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.9rem', color: 'var(--text-dark)' }}>
-                        🏷️ Название команды <span style={{ color: 'var(--danger)' }}>*</span>
+                        Название команды <span style={{ color: 'var(--danger)' }}>*</span>
                     </label>
                     <div style={{ position: 'relative' }}>
                         <input

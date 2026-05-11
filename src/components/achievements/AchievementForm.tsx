@@ -60,7 +60,7 @@ export const AchievementForm = ({ onSuccess, initialData, onCancel }: Props) => 
         <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '1rem' }}>
                 <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: '500' }}>
-                    🏷️ Название <span style={{ color: 'var(--danger)' }}>*</span>
+                    Название <span style={{ color: 'var(--danger)' }}>*</span>
                 </label>
                 <input
                     type="text"
