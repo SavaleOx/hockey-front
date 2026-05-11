@@ -169,7 +169,7 @@ export const AchievementList = () => {
                 gap: '1rem'
             }}>
                 <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    🏆 Достижения
+                    Достижения
                     <span style={{ fontSize: '0.875rem', background: 'var(--border)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
                         {filteredAchievements.length}
                     </span>
@@ -177,7 +177,7 @@ export const AchievementList = () => {
                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <input
                         type="text"
-                        placeholder="🔍 Поиск по названию или описанию..."
+                        placeholder="Поиск по названию или описанию..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                         style={{
@@ -193,7 +193,7 @@ export const AchievementList = () => {
                         <button onClick={() => setViewMode('grid')} style={{ padding: '0.5rem 0.75rem', background: viewMode === 'grid' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0.5rem 0 0 0.5rem', cursor: 'pointer', color: viewMode === 'grid' ? 'white' : 'var(--text-dark)' }}>📱 Сетка</button>
                         <button onClick={() => setViewMode('list')} style={{ padding: '0.5rem 0.75rem', background: viewMode === 'list' ? 'var(--accent)' : 'transparent', border: 'none', borderRadius: '0 0.5rem 0.5rem 0', cursor: 'pointer', color: viewMode === 'list' ? 'white' : 'var(--text-dark)' }}>📋 Список</button>
                     </div>
-                    <button onClick={openCreateModal} className="btn-primary">➕ Создать достижение</button>
+                    <button onClick={openCreateModal} className="btn-primary">Создать достижение</button>
                 </div>
             </div>
 
@@ -221,14 +221,14 @@ export const AchievementList = () => {
                                     )}
                                     <div style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>
                                         <span style={{ background: 'var(--accent)', color: 'white', padding: '0.2rem 0.5rem', borderRadius: '1rem' }}>
-                                            👥 {ach.playersCount} {getDeclension(ach.playersCount, 'игрок', 'игрока', 'игроков')}
+                                            {ach.playersCount} {getDeclension(ach.playersCount, 'игрок', 'игрока', 'игроков')}
                                         </span>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginLeft: '1rem' }}>
-                                    <button onClick={() => openEditModal(ach)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
-                                    <button onClick={() => setPlayersModalAchievement(ach)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>👥 Игроки</button>
-                                    <button onClick={() => setDeleteId(ach.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
+                                    <button onClick={() => openEditModal(ach)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Редактировать</button>
+                                    <button onClick={() => setPlayersModalAchievement(ach)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Игроки</button>
+                                    <button onClick={() => setDeleteId(ach.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Удалить</button>
                                 </div>
                             </div>
                         </div>
@@ -259,9 +259,9 @@ export const AchievementList = () => {
                                     <td className="col-players">{ach.playersCount}</td>
                                     <td className="col-actions">
                                         <div className="action-buttons-horizontal">
-                                            <button onClick={() => openEditModal(ach)} className="btn-primary">✏️ Редактировать</button>
-                                            <button onClick={() => setPlayersModalAchievement(ach)} className="btn-success">👥 Игроки</button>
-                                            <button onClick={() => setDeleteId(ach.id)} className="btn-danger">🗑️ Удалить</button>
+                                            <button onClick={() => openEditModal(ach)} className="btn-primary">Редактировать</button>
+                                            <button onClick={() => setPlayersModalAchievement(ach)} className="btn-success">Игроки</button>
+                                            <button onClick={() => setDeleteId(ach.id)} className="btn-danger">Удалить</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -271,7 +271,7 @@ export const AchievementList = () => {
                 </div>
             )}
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} title={editing ? '✏️ Редактировать достижение' : '➕ Новое достижение'}>
+            <Modal isOpen={isModalOpen} onClose={closeModal} title={editing ? 'Редактировать достижение' : 'Новое достижение'}>
                 <AchievementForm onSuccess={handleFormSuccess} initialData={editing} onCancel={closeModal} />
             </Modal>
 

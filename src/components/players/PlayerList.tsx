@@ -146,7 +146,7 @@ export const PlayerList = () => {
                 gap: '1rem'
             }}>
                 <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    👥 Игроки
+                    Игроки
                     <span style={{ fontSize: '0.875rem', background: 'var(--border)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
                         {filteredPlayers.length}
                     </span>
@@ -196,9 +196,9 @@ export const PlayerList = () => {
                                     <div style={{ fontSize: '0.85rem' }}> {p.goals}  {p.assists} |  {p.points} очков</div>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }} onClick={e => e.stopPropagation()}>
-                                    <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>✏️ Редактировать</button>
-                                    <button onClick={() => setShowAchievementsFor(p.id)} className="btn-success" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>🏅 Добавить</button>
-                                    <button onClick={() => setDeleteId(p.id)} className="btn-danger" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>🗑️ Удалить</button>
+                                    <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>Редактировать</button>
+                                    <button onClick={() => setShowAchievementsFor(p.id)} className="btn-success" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>Добавить</button>
+                                    <button onClick={() => setDeleteId(p.id)} className="btn-danger" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>Удалить</button>
                                 </div>
                             </div>
                         </div>
@@ -231,9 +231,9 @@ export const PlayerList = () => {
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }}> {p.points}</td>
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
                                         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                                            <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
-                                            <button onClick={() => setShowAchievementsFor(p.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🏅 Добавить</button>
-                                            <button onClick={() => setDeleteId(p.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
+                                            <button onClick={() => openEditModal(p)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Редактировать</button>
+                                            <button onClick={() => setShowAchievementsFor(p.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Добавить</button>
+                                            <button onClick={() => setDeleteId(p.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Удалить</button>
                                         </div>
                                     </td>
                                 </tr>

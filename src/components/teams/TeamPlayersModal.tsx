@@ -40,7 +40,7 @@ export const TeamPlayersModal = ({ teamId, teamName, onClose, onSelectPlayer }: 
     }, [teamId]);
 
     return (
-        <Modal isOpen={true} onClose={onClose} title={`👥 Игроки команды «${teamName}»`}>
+        <Modal isOpen={true} onClose={onClose} title={`Игроки команды «${teamName}»`}>
             {loading && <div className="loading-spinner" style={{ margin: '2rem auto' }} />}
             {!loading && players.length === 0 && <div style={{ padding: '2rem', textAlign: 'center' }}>Нет игроков</div>}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '60vh', overflowY: 'auto' }}>
@@ -62,7 +62,7 @@ export const TeamPlayersModal = ({ teamId, teamName, onClose, onSelectPlayer }: 
                             <strong>{player.fullName}</strong> (#{player.number}) – {getRussianPosition(player.positionName)}
                         </span>
                         <span style={{ fontSize: '0.875rem', color: 'var(--accent)' }}>
-                            🏒 {player.goals} 🎯 {player.assists}
+                            {player.goals}  {player.assists}
                         </span>
                     </div>
                 ))}

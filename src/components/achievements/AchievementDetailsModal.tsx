@@ -17,7 +17,7 @@ const getDeclension = (n: number, one: string, few: string, many: string) => {
 
 export const AchievementDetailsModal = ({ achievement, onClose }: Props) => {
     return (
-        <Modal isOpen={true} onClose={onClose} title={`🏆 Достижение: ${achievement.name}`}>
+        <Modal isOpen={true} onClose={onClose} title={`Достижение: ${achievement.name}`}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {achievement.description && (
                     <div>
@@ -27,7 +27,7 @@ export const AchievementDetailsModal = ({ achievement, onClose }: Props) => {
                 )}
                 <div>
                     <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>Владельцы</h3>
-                    <p>👥 {achievement.playersCount} {getDeclension(achievement.playersCount, 'игрок', 'игрока', 'игроков')} имеют это достижение</p>
+                    <p> {achievement.playersCount} {getDeclension(achievement.playersCount, 'игрок', 'игрока', 'игроков')} имеют это достижение</p>
                 </div>
             </div>
         </Modal>

@@ -199,7 +199,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                 }}>
                     <div>
                         <h2 style={{ margin: 0, fontSize: '1.4rem' }}>
-                            👥 Массовое добавление игроков
+                            Массовое добавление игроков
                         </h2>
                         <p style={{ margin: '0.25rem 0 0', opacity: 0.9, fontSize: '0.85rem' }}>
                             в команду <strong>{teamName || `ID ${teamId}`}</strong>
@@ -238,7 +238,7 @@ export const BulkCreatePlayers = ({ teamId, teamName, onClose, onSuccess }: Prop
                     boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
                 }}>
                     <button onClick={addPlayer} className="btn-success" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        ➕ Добавить игрока
+                        Добавить игрока
                     </button>
                 </div>
 

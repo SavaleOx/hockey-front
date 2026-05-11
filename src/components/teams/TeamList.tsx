@@ -165,9 +165,9 @@ export const TeamList = () => {
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginLeft: '1rem' }}>
-                                    <button onClick={() => openEditModal(team)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
-                                    <button onClick={() => setBulkTeamId(team.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>👥 Добавить игроков</button>
-                                    <button onClick={() => setDeleteId(team.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
+                                    <button onClick={() => openEditModal(team)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Редактировать</button>
+                                    <button onClick={() => setBulkTeamId(team.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Добавить игроков</button>
+                                    <button onClick={() => setDeleteId(team.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Удалить</button>
                                 </div>
                             </div>
                         </div>
@@ -196,9 +196,9 @@ export const TeamList = () => {
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>{team.playerIds.length}</td>
                                     <td style={{ padding: '0.75rem', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
                                         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                                            <button onClick={() => openEditModal(team)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️ Редактировать</button>
-                                            <button onClick={() => setBulkTeamId(team.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>👥 Добавить игроков</button>
-                                            <button onClick={() => setDeleteId(team.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️ Удалить</button>
+                                            <button onClick={() => openEditModal(team)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Редактировать</button>
+                                            <button onClick={() => setBulkTeamId(team.id)} className="btn-success" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Добавить игроков</button>
+                                            <button onClick={() => setDeleteId(team.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Удалить</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -208,7 +208,7 @@ export const TeamList = () => {
                 </div>
             )}
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} title={editingTeam ? '✏️ Редактировать команду' : '➕ Новая команда'}>
+            <Modal isOpen={isModalOpen} onClose={closeModal} title={editingTeam ? 'Редактировать команду' : 'Новая команда'}>
                 <TeamForm onSuccess={handleFormSuccess} initialData={editingTeam} onCancel={closeModal} />
             </Modal>
 

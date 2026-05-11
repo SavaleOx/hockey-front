@@ -73,13 +73,13 @@ export const AchievementPlayersModal = ({ achievementId, achievementName, onClos
 
     return (
         <>
-            <Modal isOpen={true} onClose={onClose} title={`🏆 Игроки с достижением «${achievementName}»`}>
+            <Modal isOpen={true} onClose={onClose} title={`Игроки с достижением «${achievementName}»`}>
                 {loading && <div className="loading-spinner" style={{ margin: '2rem auto' }} />}
                 {!loading && (
                     <>
                         {/* Блок с уже имеющими достижение */}
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>👥 Есть достижение:</h3>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Есть достижение:</h3>
                             {data.playersWithAchievement.length === 0 && <p style={{ opacity: 0.7 }}>Нет игроков с этим достижением.</p>}
                             <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid var(--border)', borderRadius: '0.5rem', padding: '0.5rem' }}>
                                 {data.playersWithAchievement.map(p => (
@@ -100,10 +100,10 @@ export const AchievementPlayersModal = ({ achievementId, achievementName, onClos
 
                         {/* Блок добавления – поиск + список */}
                         <div>
-                            <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>➕ Добавить игроку:</h3>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Добавить игроку:</h3>
                             <input
                                 type="text"
-                                placeholder="🔍 Поиск по имени или команде..."
+                                placeholder="Поиск по имени или команде..."
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                                 style={{
@@ -127,7 +127,7 @@ export const AchievementPlayersModal = ({ achievementId, achievementName, onClos
                                             style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}
                                             disabled={actionLoading === p.id}
                                         >
-                                            {actionLoading === p.id ? '...' : '➕ Добавить'}
+                                            {actionLoading === p.id ? '...' : 'Добавить'}
                                         </button>
                                     </div>
                                 ))}

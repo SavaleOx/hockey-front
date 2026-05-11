@@ -194,7 +194,7 @@ export const PlayerDetailsModal = ({ playerId, onClose }: Props) => {
 
                     {achievements.length > 0 && (
                         <div>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>🏆 Достижения</h3>
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.75rem' }}>Достижения</h3>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                                 {achievements.map(ach => (
                                     <AchievementBadge key={ach.id} name={ach.name} description={ach.description} />

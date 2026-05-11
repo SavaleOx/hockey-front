@@ -52,7 +52,7 @@ export const PlayerFilters = ({ teams, onFilterChange, onReset }: Props) => {
     return (
         <div style={{ marginBottom: '1.5rem' }}>
             <button onClick={() => setShowFilters(!showFilters)} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                🔍 {showFilters ? 'Скрыть фильтры' : 'Показать фильтры'}
+                 {showFilters ? 'Скрыть фильтры' : 'Показать фильтры'}
             </button>
             {showFilters && (
                 <div style={{

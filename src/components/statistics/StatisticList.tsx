@@ -247,7 +247,7 @@ export const StatisticList = () => {
                                         (доступно с {minSeason} по {currentYear})
                                     </span>
                                 </div>
-                                <button onClick={openCreateModal} className="btn-primary">➕ Добавить статистику</button>
+                                <button onClick={openCreateModal} className="btn-primary">Добавить статистику</button>
                             </div>
 
                             {loading && <div className="loading-spinner" style={{ margin: '2rem auto' }} />}
@@ -280,8 +280,8 @@ export const StatisticList = () => {
                                                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>{s.points}</td>
                                                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>
                                                         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                                                            <button onClick={() => openEditModal(s)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>✏️</button>
-                                                            <button onClick={() => setDeleteId(s.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>🗑️</button>
+                                                            <button onClick={() => openEditModal(s)} className="btn-primary" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Редактировать</button>
+                                                            <button onClick={() => setDeleteId(s.id)} className="btn-danger" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>Удалить</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -301,7 +301,7 @@ export const StatisticList = () => {
                 </div>
             )}
 
-            <Modal isOpen={isModalOpen} onClose={closeModal} title={editingStat ? '✏️ Редактировать статистику' : '➕ Добавить статистику'}>
+            <Modal isOpen={isModalOpen} onClose={closeModal} title={editingStat ? 'Редактировать статистику' : 'Добавить статистику'}>
                 <StatisticForm
                     playerId={selectedPlayer?.id}
                     playerAge={selectedPlayer?.age}

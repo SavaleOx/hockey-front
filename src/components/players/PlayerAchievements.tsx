@@ -54,7 +54,7 @@ export const PlayerAchievements = ({ playerId, onClose }: Props) => {
                     <div style={{ marginBottom: '1rem' }}>
                         <input
                             type="text"
-                            placeholder="🔍 Поиск достижений..."
+                            placeholder="Поиск достижений..."
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                             style={{
